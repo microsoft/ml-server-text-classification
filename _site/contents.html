@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <title>Template Contents</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Use SQL Server 2017 + ML Services with Python to execute a transfer learning algorithm to detect image similarity.">
+    <meta name="author" content="Microsoft">
+
+    <!-- Le styles -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="stylesheets/mystyles.css">
+
+  </head>
+  <body> 
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="jumboton teal">
+            <h1>Image Similarity</h1>
+            <p>Implemented with Microsoft Machine Learning Services</p>
+          </div>
+              <div class="content">
+                <h2 id="template-contents">Template Contents</h2>
+<hr />
+
+<p>The following is the directory structure for this template:</p>
+
+<ul>
+  <li><a href="#data"><strong>data</strong></a>  This contains all the images used to train and test the image similarity model.</li>
+  <li><a href="#model-development-in-python"><strong>Python</strong></a>  This contains the Python code to prepare training/testing/evaluation set, train the multi-class classifier and evaluate the model.</li>
+  <li><a href="#resources-for-the-solution-packet"><strong>Resources</strong></a> This directory contains other resources for the solution package.</li>
+</ul>
+
+<h3 id="data">Data</h3>
+<hr />
+
+<table class="table table-striped table-condensed">
+<tr><th> File </th><th> Description</th></tr>
+
+</table>
+
+<h3 id="image-similarity">Image Similarity</h3>
+<hr />
+<p>This folder contains a Python package with helper functions that are used both in the **run_image_similarity.py ** code as well as the SQL Stored Procedures.</p>
+
+<h3 id="model-development-in-python">Model Development in Python</h3>
+<hr />
+
+<table class="table table-striped table-condensed">
+<tr><th> File </th><th> Description </th></tr>
+<tr><td> Train Model.ipynb  </td><td> Contains the Jupyter Notebook file that trains the model. </td></tr>
+<tr><td> Test Model.ipynb  </td><td> Contains the Jupyter Notebook file that demonstrates the model. </td></tr>
+<tr><td>copy_images_to_filetable.py  </td><td> Populates the SQL database with the image needed for training and testing the model </td></tr>
+<tr><td>parameters.py  </td><td> Parameters used in run_image_similarity.py  </td></tr>
+<tr><td>run_image_similarity.py  </td><td> featurize images using pre-trained DNN model, prepare training/testing/evaluation image set, train a multi-class classifier and save the model into SQL table, evaluate the image ranking system using evlauation image set, and  return top K similar candidates for new query images</td></tr>
+</table>
+
+<ul>
+  <li>See <a href="data_scientist.html">For the Data Scientist</a> for more details about these files.</li>
+</ul>
+
+<h3 id="operationalize-in-sql-python">Operationalize in SQL Python</h3>
+<hr />
+<p>Stored procedures in SQL implement the model training workflow.</p>
+
+<ul>
+  <li>See <a href="dba.html"> For the Database Analyst</a> for more information.</li>
+  <li>Follow the <a href="Powershell_Instructions.html">PowerShell Instructions</a> to execute the PowerShell script which creates these stored procedures.</li>
+</ul>
+
+<h3 id="resources-for-the-solution-package">Resources for the Solution Package</h3>
+<hr />
+
+<table class="table table-striped table-condensed">
+<tr><th> File </th><th> Description </th></tr>
+
+<tr><td> .\Resources\ActionScripts\ConfigureSQL.ps1</td><td>Configures SQL, called from SetupVM.ps1  </td></tr>
+<tr><td> .\Resources\ActionScripts\CreateDatabase.sql</td><td>Creates the database for this solution, called from ConfigureSQL.ps1  </td></tr>
+<tr><td> .\Resources\ActionScripts\CreateSQLObjectsPy.sql</td><td>Creates the tables and stored procedures for this solution, called from ConfigureSQL.ps1   </td></tr>
+<tr><td> .\Resources\ActionScripts\SetupVM.ps1</td><td>Configures SQL, creates and populates database</td></tr>
+<tr><td> .\Resources\ActionScripts\SolutionHelp.url</td><td>URL to the help page </td></tr>
+<tr><td> .\Resources\ActionScripts\installPyPkg.bat</td><td>Installs the imagesimilarity Python package   </td></tr>
+<tr><td> .\Resources\ActionScripts\query_images.csv</td><td>sample images for querying   </td></tr>
+<tr><td> .\Resources\Images\ </td><td> Directory of images used for the  Readme.md  in this package. </td></tr>
+</table>
+
+<p><a href="index.html">&lt; Home</a></p>
+
+              </div>  
+          </div><!--/col -->
+
+        <div class="col-sm-3 sidebar-offcanvas" id="sidebar">
+          <img  src="images/TextAnalysis.png">
+          <div class="list-group">
+          <a href="index.html" class="list-group-item">Home</a>
+					<a href="data-scientist.html" class="list-group-item">For the Data Scientist</a>
+          <a href="dba.html" class="list-group-item">For the Database Analyst</a>
+					<a href="quick.html" class="list-group-item">Quick Start</a>
+				  </div>
+        <hr />
+            <div class="center">
+            <a  class="btn btn-large btn-info" href="https://github.com/Microsoft/ml-server-image-similarity">
+            View On <strong>GitHub</strong></a>
+            </div>
+            <hr />
+            <p class="details">Other Links</p>
+              <div class="toc">
+                <li><a href="contents.html">Packet Contents</a></li>
+                <li><a href="sitemap.html">Site Map</a></li>
+
+            </div>
+          </div><!--/col -->
+      </div><!-- /row -->
+
+<div class="row">
+  <hr />
+      <footer>
+        <p> 
+This project has adopted the <a href="https://opensource.microsoft.com/codeofconduct/">Microsoft Open Source Code of Conduct</a>. For more information see the <a href="https://opensource.microsoft.com/codeofconduct/faq/">Code of Conduct FAQ</a> or contact <a href="mailto:opencode@microsoft.com">opencode@microsoft.com</a> with any additional questions or comments.</p>
+        <p><small>Hosted on GitHub Pages</small> </p>
+      </footer>
+  </div>
+  
+</div><!-- /container -->
+
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88854735-5', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    
+
+  </body>
+</html>
