@@ -43,13 +43,12 @@ $Prompt = 'N'
 
 ##Change Values here for Different Solutions 
 $SolutionName = "TextClassification"
-$SolutionFullName = "ml-server"
-$JupyterNotebook = "none.ipynb"
+$SolutionFullName = "ml-server-text-classification"
 $Shortcut = "SolutionHelp.url"
 
 
 ### DON'T FORGET TO CHANGE TO MASTER LATER...
-$Branch = "txtcls" 
+$Branch = "dev" 
 $InstallR = 'Yes'  ## If Solution has a R Version this should be 'Yes' Else 'No'
 $InstallPy = 'Yes' ## If Solution has a Py Version this should be 'Yes' Else 'No'
 $SampleWeb = 'No' ## If Solution has a Sample Website  this should be 'Yes' Else 'No' 
@@ -282,25 +281,6 @@ $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
 
 
-# if($MixedAuth -eq 'Yes')
-# {
-#     If($InstallR = 'Yes')
-#         {
-#         ## copy Jupyter Notebook files
-#         Move-Item $SolutionPath\R\$JupyterNotebook  c:\tmp\
-#         sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-#         sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-#         Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\R\
-#         }
-
-#     if ($InstallPy -eq "Yes")
-#         {
-#         Move-Item $SolutionPath\Python\$JupyterNotebook  c:\tmp\
-#         sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\$JupyterNotebook
-#         sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\$JupyterNotebook
-#         Move-Item  c:\tmp\$JupyterNotebook $SolutionPath\Python\
-#         }
-# }
 
 
 # install modules for sample website
