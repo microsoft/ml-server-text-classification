@@ -85,4 +85,3 @@ Label_Names_df = pd.DataFrame({'Label': list(range(0,20)),
 News_Train_df.to_csv(os.path.join(sys.path[0], "News_Train"), sep='\t', header = True, index = False, encoding='utf-8')
 News_Test_df.to_csv(os.path.join(sys.path[0], "News_Test"), sep='\t', header = True, index = False, encoding='utf-8')
 Label_Names_df.to_csv(os.path.join(sys.path[0], "Label_Names"), sep='\t', header = True, index = False, encoding='utf-8')
-News_Score_df.to_csv(os.path.join(sys.path[0], "News_Score"), sep='\t', header = True, index = False, encoding='utf-8')
