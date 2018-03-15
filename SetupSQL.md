@@ -29,6 +29,8 @@ If you need a trial version of SQL Server see [What's New in SQL Server 2016](ht
 
 Complete the steps in the Set up Microsoft Machine Learning Services (In-Database) Instructions. The set up instructions file can found at  <a href="https://msdn.microsoft.com/en-us/library/mt696069.aspx" target="_blank"> https://msdn.microsoft.com/en-us/library/mt696069.aspx</a>
 
+Make sure to install both SQL and Standalone version of R and Python.
+
 
 ### Ready to Run Code 
 ---------------------

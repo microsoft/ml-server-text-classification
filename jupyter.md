@@ -11,13 +11,15 @@ You can view and execute the R or Python code for this solution in a Jupyter Not
 Open a Powershell or Terminal window and execute the following:
 
 ```
-    cd c:\Solutions\{{ site.folder_name }}\Python
+    cd c:\Solutions\{{ site.folder_name }}
     jupyter notebook
 ```
 
-After a moment, the browser window will open.  Select the `ML Server` kernel for the Python notebook.
+After a moment, the browser window will open.
 
-You can execute the **Train Model** notebook to train a model. Since a model has already been built, you can also skip to the **Test Model** notebook find similar images for a new image. Try this out with one of the images in the notebook or try an image of your own.
+Navigate to the **R** directory to run the R notebook, or the **Python** directory for the Python notebook.  Select the `ML Server` kernel for the Python notebook.
+
+The notebooks step through all the same steps as described in the [For the Data Scientist](data-scientist.html) page.
 
 
 ## Using Jupyter

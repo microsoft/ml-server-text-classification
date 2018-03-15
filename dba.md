@@ -12,19 +12,20 @@ title: For the Database Analyst
             <li><a href="#system-requirements">System Requirements</a></li>
             <li><a href="#workflow-automation">Workflow Automation</a></li>
             <li><a href="#step0">Step 0: Creating Tables</a></li>
-            <li><a href="#step1">Step 1: Featurization of images with pre-trained DNN model</a></li>
-            <li><a href="#step2">Step 2: Prepare training/testing/evaluation set</a></li>
-            <li><a href="#step3">Step 3: Training multi-class classifier</a></li>
-            <li><a href="#step4">Step 4: Evaluate model</a></li>
-             <li><a href="#step5">Step 5: Ranking candidates for each query image</a></li>
+            <li><a href="#step1">Step 1: Create features on the fly for the training set and train the model</a></li>
+            <li><a href="#step2">Step 2: Create features on the fly for the testing set and make predictions</a></li>
+            <li><a href="#step3">Step 3: Evaluate the model</a></li>
         </div>
     </div>
     <div class="col-md-6">
-              Microsoft Machine Learning Services provide an extensible, scalable platform for integrating machine learning tasks and tools with the applications that consume machine learning services. It includes a database service that runs outside the SQL Server process and communicates securely with R and Python. 
+              Microsoft Machine Learning Services provide an extensible, scalable platform for integrating machine learning tasks and tools with the applications that consume machine learning services. It includes a database service that runs outside the SQL Server process and communicates securely with R and Python.
         <p>
-       This solution package shows how to pre-process images (cleaning and feature engineering), train prediction models, and perform scoring on the SQL Server machine with stored procedures which includes Python code.  </p>
+       This solution package shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on the SQL Server machine with stored procedures which includes Python code.  </p>
           </div>
 </div>
+When a customer sends a support ticket, it is important to route it to the right team in order to examine the issue and solve it in the fastest way possible. We use sample data containing a Subject, a Text, and a Label to build a machine learning model that can predict a label for new incoming data.
+
+This solution takes advantage of the power of SQL Server and RevoScaleR and RevoScalePy. The tables are all stored in a SQL Server, and most of the computations are done by loading chunks of data in-memory instead of the whole dataset.
 
 All the steps can be executed on SQL Server client environment (SQL Server Management Studio). We provide a Windows PowerShell script which invokes the SQL scripts and demonstrates the end-to-end modeling process.
 
@@ -38,188 +39,86 @@ All the steps can be executed on SQL Server client environment (SQL Server Manag
 -------------------
 Follow the [PowerShell instructions](Powershell_Instructions.html) to execute all the scripts described below.  [Click here](tables.html) to view the SQL database tables created in this solution.
 
-The SQL Stored procedure `Initial_Run_Once_Py` can be used to re-run steps 1-5 below.
+The SQL Stored procedure `Initial_Run_Once_R` or `Initial_Run_Once_Py` `{{ site.db_name }}_R` or `{{ site.db_name }}_Py` database, respectively, can be used to re-run all the steps below
 
- 
 <a name="step0"></a>
 
 ### Step 0: Creating Tables
 -------------------------
 
+In this step, we create four tables, `News_Train`, `News_Test`, `News_To_Score`, and `Label_Names` in a SQL Server database, and the data is uploaded to these tables using bulkcopy process from PowerShell. 
 
-### Input:
-
-* Images in the directory **C:\Solution\ImageSimilarity\data\fashionTexture** are used to populate the FileTable created in this step
-
-### Output:
-
-* ImageStore
-
-
-### Example:
-
-    EXEC CreateTables
-
-Then copy images into the directory `\\computer-name\MSSQLSERVER\FileTableimages\ImageStore`
+In the PowerShell script, the python script "download_data.py" in the Data folder is executed. It downloads and preprocesses the data, then save it to disk. Data is then uploaded to the SQL Tables through a bulkcopy process.
 
 <a name="step1"></a>
 
-## Step 1: Featurization of images with pre-trained DNN model
+### Step 1: Create features on the fly for the training set and train the model
 -------------------------
-This step generates features from the images using a pre-trained Resnet in `microsoftml`. The input is the FileTable `@image_table` which contains the images, the output is the SQL Table `@feature_table` which saves the images' path, label,
-and DNN features. The dimension of the features depends on which Resnet Model is used in this step. Here we used Resnet18 which generates 512-dimensional features for each image.
-The stored procedure `FeaturizeImages` contains three steps:
 
-1. First, get the images path from the FileTable, map the distinct categories of all the images to factor labels.
+For feature engineering, we want to featurize the text variables in the data: Subject and Text. 
+The Subject and Text are featurized separately in order to give to the words in the Subject the same weight as those in the Text. This approach is also applicable to Support Tiket Classification problems.
 
-2. Second, get a label for each image based on the its category.
+For each of the Subject and the Text separately, we:
 
-3. Third, calculate the features using `microsoftml` library given the images path. You can find the code in **image_similarity/image_similarity_utils.py**.
+* Remove stopwords, diacritics, punctuation and numbers.
+* Change capital letters to lower case.
+* Hash the different words and characters.
 
-### Input:
-* `ImageStore` table
+The parameters or options can be further optimized by parameter sweeping.
 
-### Output:
-* `features` table
+This is done by following these steps:
 
+1. Get the factor levels of the label in the order of encounter based on the Id, serialize them, and save them to SQL Server for future use.
 
-### Example:
+2. Define the text transformation to be used to generate features, in the form of a list. It will be applied on the fly during training and testing.
 
-    EXEC FeaturizeImages 'ImageStore', 'features'
+3. Train a multiclass logistic regression on the training set, using the text transformation list.
+
+The model trained is then serialized and saved to SQL Server for future use.
+
+**Example:**
+
+    exec [dbo].[train_model] @model_key = 'LR';
 
 <a name="step2"></a>
 
-## Step 2: Prepare training/testing/evaluation set
+### Step 2: Create features on the fly for the testing set and make predictions
 -------------------------
-This step prepares the training/testing/evaluation image set. Here is the detail information about how to generate training/testing/evaluation set:
 
-1. Randomly split all the images into training/testing set based on category information and train/test ratio, users can change the parameter `@ratioTrainTest` according to the number of total images they have. For example, if the `@ratioTrainTest = 0.7`, then for each category, randomly select 70% images as training images and the left 30% images as testing images.
+In the same fashion, we call the prediction function on the testing set News_Test. It makes predictions while featurizing the text variables (Subject and Text) separately on the fly. This will automatically use the same text transformation as in the training, encoded in logistic_model.
 
-2. Once the testing images were inserted into the SQL table, we generate evaluation image set based on testing images since we do not want to evaluation images overlap with the training images.
+Once we get the predictions, we perform an inner join with the "Label_Names" table in order to get the names of the predicted labels.
 
-3. Randomly select images from each category as query images, and then randomly select 1 positive image from the same category and some negative images from the other categories. So for each query image, we create 101 image pairs. Users also can set up parameter `@queryImagePerCat`
- to decide how many query images they want to select from each category, and set up parameter `@negImgsPerQueryImg` to decide how many negative images they want to select for each query image.
+This is done through the stored procedure "[dbo].[score]". It takes as inputs the name of the table with the data set to score, and the name of the table that will hold the output predictions.
 
-4. For example, in this sample, we set up `@queryImagePerCat = 20` and `@negImgsPerQueryImg = 100`, finally, the evaluation set contains 220 query images since the image images contains 11 categories, and each query image has 101 candidates (1 positive image and 100 negative images). 
+**Example:**
 
-### Input:
-* `features` table
-
-### Output:
-* `training_images` table
-*  `testing_images` table 
-*  `evaluation_images` table
-*  `@negImgsPerQueryImg` 
-
-
-### Example:
-
-    EXEC PrepareData 'features', 'training_images', 'testing_images', 'evaluation_images', 0.75, 20, 100
+    exec [dbo].[score] @input = 'News_Test', @output = 'Predictions', @model_key = 'LR'
 
 <a name="step3"></a>
 
-## Step 3: Training multi-class classifier
+### Step 3: Evaluate the model
 -------------------------
-Once the features are computed, and the training images and testing images are inserted into the SQL table, we can use them to train a neural network model using `microsoftml` library and then save the model into SQL table.
 
-1. Get the DNN features for the training images and testing images from the feature table `@feature_table`, then train multi-class classifier using neural network algorithm in `microsoftml` library. Finally, evaluate the performance of the classifier using testing images.
+Finally, we compute performance metrics in order to evaluate the model for this multi-class classification problem.
 
-2. Overall accuracy is calculated to measure the performance of the classifier.
+* Micro Average Accuracy: It is the overall accuracy, which corresponds to the number of correct class predictions divided by the total number of observations in the testing set (ie. rate of correct classification). In this sense, performing poorly on some rare classes but very accurately predicting the rest might still give a good result.
 
-    <table class="table" >
-        <thead>
-            <tr>
-                <th>Pre-trained model</th>
-                <th>Classifier</th>
-                <th>Accuracy on train set</th>
-                <th>Accuracy on test set</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Resnet18</td>
-                <td>rx_neural_network</td>
-                <td>89.7%</td>
-                <td>75.1%</td>
-            </tr>
-        </tbody>
-    </table>
+* Macro Average Accuracy: It corresponds to the average of the per-class accuracy. In this sense, it treats all the classes equally, even if some of the classes are rare.
 
-3. Get the predicted scores of all the images in training and testing table using trained classifier, and save the predicted scores into SQL table `@scores_table`. Here we use all the images as the candidates for the last step. Users also can have their own candidate images. To get the predicted scores for users' own candidate images, first, you have to featurize the candidate images using the pre-trained Resnet, and then load the classifier to calculate the predicted scores for your own candidate images.
+These two metrics should thus be analyzed together, especially in the case of class imbalances.
 
-### Input:
-* `features` table
-* `training_images` table
-* `testing_images` table
+This is done through the stored procedure `[dbo].[evaluate]`, which takes as an input the name of the table holding the predictions.
 
-### Output:
-* `scores` table
-* `model` table
+**Example:**
 
+    exec [dbo].[evaluate] @predictions_table = 'Predictions', @model_key = 'LR'
 
-### Example:
+After evaluating the model, predictions are made on a new data set, News_To_Score.
 
-    EXEC TrainClassifier 'features', 'training_images', 'testing_images', 'scores', 'model'
+**Example:**
 
-<a name="step4"></a>
+    exec [dbo].[score] @input = 'News_To_Score', @output = 'Predictions_New', @model_key = 'LR'
 
-## Step 4: Evaluate model 
--------------------------
-Once the model and the predicted scores of all the images are saved into SQL table, we can get the predicted scores from the `@scores_table` for all the image pairs in the evaluation table `@evaluation_table`. Based on the predicted scores, we can calculate the distance between each image pair to measure
-their similarity so that we can evaluate the performance of the model in terms of ranking.
-
-1. Load the predicted scores for all the images, for example, in this sample, the image images contains 11 categories, so the predicted score is a 11-dimensional vector for each image.
-
-2. Load the image pairs from the evaluation table, for each image pair, we can get two 11-dimensional vectors, we calculate L2 and Cosine distance between these two vectors to measure the similarity. So for each image pair, we get two distances.
-
-3. We calculate top 1, 2, 4, 5, 8, 10, 15, 20, 28 and 32 accuracy to measure the ranking performance. 
-
-### Input:
-* `scores` table
-* `evaluation_images` table
-
-### Output:
-* accuracy measures
-
-
-### Example:
-
-    EXEC EvaluateModel 'scores', 'evaluation_images'
-
-<a name="step5"></a>
-
-## Step 5: Ranking candidates for each query image
--------------------------
-Once the accuracy of the image ranking system satisfy the requirement, we can rank the candidates for the query images. 
-
-1. In order to get the similar images for each query image quickly, we have to make the predicted scores of all the candidate images ready before this step. We explained how to get the predicted scores for users' own candidate images in step 3. So we assume
-the predicted scores of all the candidate images are already saved in SQL table `@scores_table`, we just need to load the predicted scores for all the candidate images from the SQL table. We don't need to calculate them in this step.
-
-2. Assume all the query images are already saved in SQL table `@query_table`. we load the query images from the SQL table, and then featurize the query images using pre-trained Resnet, here you have to used the same pre-trained model which used in the step 1.
-
-3. Load the model which trained in step 3 form SQL table `@model_table`, and calculate the predicted scores for all the query images using the model.
-
-4. Calculate the Cosine distance between each query image and all the candidates, based on the distance, return top K similar images for each query images. Users can set up parameter `@topKCandidates` to decide how many similar images should be returned for each query image.
- For example, here we set `@topKCandidates` equal to 10, so in the result table `@results_table`, each query image has 10 similar images.
-
-### Input:
-* `@topKCandidates` - number of images to return for each input
-* `query_images` table
-* `scores` table 
-* `model` table
-
-### Output:
-* * `ranking_results` table
-
-### Example:
-
-    EXEC RankCandidates 10, 'query_images', 'scores', 'model', 'ranking_results'
-
-
-
-
-
-
-
-
+These new records can be seen in the second tab of the PowerBI report. 
 
