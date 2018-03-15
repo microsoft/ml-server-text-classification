@@ -245,7 +245,7 @@ Write-Host "CU Install has commenced
 "
 Write-Host "Powershell time to take a nap
 "
-Start-Sleep -s 600
+Start-Sleep -s 1000
 Write-Host "Powershell nap time is over
 "
 }
