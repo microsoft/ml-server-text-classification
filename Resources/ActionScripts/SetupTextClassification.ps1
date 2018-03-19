@@ -227,7 +227,7 @@ ELSE 0
 END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
-
+$RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
 IF ($RequireCuUpdate -eq 0) 
 {
 ##WRITE-Host "CU Needs Updating will be done at end of Script
@@ -329,7 +329,7 @@ if($SampleWeb  -eq "Yes")
 # "
 # Start-Sleep -s 600
 # Write-Host "Powershell nap time is over
-# "
+# 
 # }
 
 ##Launch HelpURL 
