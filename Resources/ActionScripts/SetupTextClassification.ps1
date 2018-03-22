@@ -31,7 +31,7 @@ if ($isAdmin -eq 'True')
 {
 $startTime = Get-Date
 
-$setupLog = "c:\tmp\setup_log.txt"
+$setupLog = "c:\tmp\text_setup_log.txt"
 Start-Transcript -Path $setupLog -Append
 $startTime = Get-Date
 Write-Host  "Start time:$startTime
