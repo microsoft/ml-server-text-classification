@@ -22,8 +22,6 @@ param(
 
 ###Check to see if user is Admin
 
-
-
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
         [Security.Principal.WindowsBuiltInRole] "Administrator")
         
@@ -65,6 +63,18 @@ $SolutionPath = $solutionTemplatePath + '\' + $checkoutDir
 $desktop = "C:\Users\Public\Desktop\"
 $scriptPath = $SolutionPath + "\Resources\ActionScripts\"
 $SolutionData = $SolutionPath + "\Data\"
+
+###If not run as DSVM , prompt for UI and PW 
+
+if ($SampleWeb -eq "Yes")             
+    {    
+    if([string]::IsNullOrEmpty($username)) 
+        {
+        $Credential = $Host.ui.PromptForCredential("Need credentials", "Please supply an user name and password to configure SQL for mixed mode authentication.", "", "")
+        $username = $credential.Username
+        $password = $credential.GetNetworkCredential().password 
+        }  
+    }
 
 ##########################################################################
 #Clone Data from GIT
