@@ -64,47 +64,49 @@
     <p>Log onto the machine that contains the SQL Server you wish to use.</p>
   </li>
   <li>
-    <p>Download  <a href="https://raw.githubusercontent.com/Microsoft/r-server-campaign-optimization/master/Resources/ActionScripts/SetupVM.ps1" download="">SetupVM.ps1</a> to your computer.</p>
+    <p>Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-image-similarity/master/Resources/ActionScripts/SetupVM.ps1" download="">SetupVM.ps1</a> to your computer.</p>
   </li>
   <li>
-    <p>Right click on SetupVM.ps1 and select <code class="highlighter-rouge">Run with PowerShell</code>.</p>
+    <p>Open a command or PowerShell window as Administrator.</p>
   </li>
   <li>
-    <p>Answer <code class="highlighter-rouge">Y</code> if asked if it is ok to execute this script.</p>
+    <p>CD to the directory where you downloaded the above .ps1 file and execute the command:</p>
+
+    <p>.\SetupVM.ps1</p>
   </li>
   <li>
-    <p>This will make the following modification to your SQL Server:`</p>
-    <ul>
-      <li>Creates the SLQRUserGroup for running R and Python code.</li>
-      <li>Reconfigures SQL Server to allow running of external scripts.</li>
-      <li>Installs the latest SQL Server 2017 Cumulative Update if no updates have been installed (this solution requires at least CU1 to run successfully).</li>
-      <li>Clones the solution code and data into the c:\Solutions\ImageSimilarity directory.</li>
-      <li>Installs the image_similarity Python package.</li>
-      <li>Creates the solution database <code class="highlighter-rouge">ImageSimilarity</code></li>
-      <li>Enables FILESTREAM at the SQL instance level as described <a href="https://docs.microsoft.com/en-us/sql/relational-imagesbases/blob/enable-the-prerequisites-for-filetable">here</a>.</li>
-      <li>Copies images to the configured filestream directory.</li>
-      <li>Copies the Resnet model needed for this solution into the correct directory.d</li>
-    </ul>
+    <p>Answer the prompts.</p>
   </li>
 </ol>
+
+<p>This will make the following modification to your SQL Server:</p>
+
+<ul>
+  <li>Creates the SLQRUserGroup for running R and Python code.</li>
+  <li>Reconfigures SQL Server to allow running of external scripts.</li>
+  <li>Installs the latest SQL Server 2017 Cumulative Update if no updates have been installed (this solution requires at least CU1 to run successfully).</li>
+  <li>Enables firewall access for FILESTREAM</li>
+  <li>Enables FILESTREAM at the SQL instance level as described <a href="https://docs.microsoft.com/en-us/sql/relational-imagesbases/blob/enable-the-prerequisites-for-filetable">here</a>.</li>
+  <li>Copies the Resnet model needed for this solution into the correct directory.</li>
+  <li>Clones the solution code and data into the c:\Solutions\ImageSimilarity directory.</li>
+  <li>Installs the image_similarity Python package.</li>
+  <li>Creates the solution database <code class="highlighter-rouge">ImageSimilarity</code></li>
+  <li>Copies images to the configured filestream directory.</li>
+  <li>Runs the solution workflow to populate all database tables.</li>
+</ul>
+
+<div class="alert alert info">    
+If you wish to run the solution code on a different computer than SQL Server machine, see <a href="local.html">Setup for Local Code Execution</a>.
+</div>
 
 <h2 id="review-data">Review Data</h2>
 <hr />
 
-<p>Once the PowerShell script has completed successfully, log into the SQL Server Management Studio to view all the datasets that have been created in the <code class="highlighter-rouge">ImageSimilarity_Py</code> databases.<br />
-Hit <code class="highlighter-rouge">Refresh</code> if necessary.
-<br /></p>
+<p>Once the PowerShell script has completed successfully, log into the SQL Server Management Studio to view all the datasets that have been created in the <code class="highlighter-rouge">ImageSimilarity_R</code> or <code class="highlighter-rouge">ImageSimilarity_Py</code> databases.<br />
+Hit <code class="highlighter-rouge">Refresh</code> if necessary.</p>
 
 <p><a href="tables.html">Click here</a> to view the details all tables created in this solution.</p>
 
-<h2 id="trying-the-model">Trying the Model</h2>
-<hr />
-
-<p>You’ve now finsihed the process of featurizing images using pre-trained DNN model, preparing the training/testing/evaluation image set, training a multi-class classifier and saving the model into SQL table as <a href="data-scientist.html">described here</a>.</p>
-
-<p>This PowerShell script also created the stored procedures to perform these tasks as well as a procedure that can be used to  return top K similar candidates for new query images.</p>
-
-<p>You can explore this solution in more detail by examining the folders and running Python or stored procedures to re-create the model, or skip to trying out the model in the included <strong>Test Model.ipynb</strong> <a href="jupyter.html">Jupyter notebook</a>.</p>
 
               </div>  
           </div><!--/col -->
@@ -127,6 +129,7 @@ Hit <code class="highlighter-rouge">Refresh</code> if necessary.
               <div class="toc">
                 <li><a href="contents.html">Packet Contents</a></li>
                 <li><a href="sitemap.html">Site Map</a></li>
+                <li><a href="https://aka.ms/ml-server-samples">Other ML Server Solutions</a></li>
 
             </div>
           </div><!--/col -->
@@ -146,7 +149,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 
-<script>
+<!-- <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -155,7 +158,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
   ga('create', 'UA-88854735-5', 'auto');
   ga('send', 'pageview');
 
-</script>
+</script> -->
     
 
   </body>

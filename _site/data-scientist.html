@@ -27,7 +27,7 @@
             <p>Implemented with Microsoft Machine Learning Services</p>
           </div>
               <div class="content">
-                <h2 id="for-the-data-scientist---develop-with-python">For the Data Scientist - Develop with Python</h2>
+                <h2 id="for-the-data-scientist---develop-with-r-or-python">For the Data Scientist - Develop with R or Python</h2>
 <hr />
 
 <div class="row">
@@ -36,23 +36,27 @@
             <li><a href="#first">Image Similarity</a></li>
             <li><a href="#system-requirements">System Requirements</a></li>
             <li><a href="#data">Data</a></li>
-            <li><a href="#end-to-end_run">End-to-end run</a></li>
-            <li><a href="#step1">Step1: Pre-Processing and Cleaning</a></li>
-            <li><a href="#step2">Step2: Feature Engineering</a></li>
-            <li><a href="#step3">Step3: Splitting, Training, Testing and Evaluating</a></li>
-            <li><a href="#step4">Step 4: Evaluate model</a></li>
-            <li><a href="#step5">Step 5: Ranking candidates for each query image</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#step1">Step 1: Loading the data to SQL Server     </a></li>
+            <li><a href="#step2">Step 2: Create features on the fly for the training set and train the model</a></li>
+            <li><a href="#step3">Step 3: Create features on the fly for the testing set, make predictions, and evaluate the model</a></li>
             <li><a href="#template-contents">Template Contents</a></li>
         </div>
     </div>
     <div class="col-md-6">
-        Microsoft Machine Learning Services provide an extensible, scalable platform for integrating machine learning tasks and tools with the applications that consume machine learning services. It includes a database service that runs outside the SQL Server process and communicates securely with R and Python. 
+        Microsoft Machine Learning Services provide an extensible, scalable platform for integrating machine learning tasks and tools with the applications that consume machine learning services. It includes a database service that runs outside the SQL Server process and communicates securely with R and Python.
         <p>
-       This solution package shows how to pre-process images (cleaning and feature engineering), train prediction models, and perform scoring on the SQL Server machine with Python.  </p>
+       This solution package shows how to pre-process data (cleaning and feature engineering), train prediction models, and perform scoring on the SQL Server machine in either R or Python.</p>
     </div>
 </div>
 
-<p>Scientists who are testing and developing solutions can work from the convenience of their preferred IDE on their client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx">setting the computation context to SQL</a> (see  <strong>Python</strong> folder for code).  They can also deploy the completed solutions to SQL Server 2017 by embedding calls to Python in stored procedures. These solutions can then be further automated by the use of SQL Server Integration Services and SQL Server agent: a PowerShell script (.ps1 file) automates the running of the SQL code.</p>
+<p>When a customer sends a support ticket, it is important to route it to the right team in order to examine the issue and solve it in the fastest way possible. We use sample data containing a Subject, a Text, and a Label to build a machine learning model that can predict a label for new incoming data.</p>
+
+<p>This solution takes advantage of the power of SQL Server and RevoScaleR and RevoScalePy. The tables are all stored in a SQL Server, and most of the computations are done by loading chunks of data in-memory instead of the whole dataset.</p>
+
+<p>All these steps can be executed in a R or Python IDE, and are then operationalized into SQL Server Stored Procedures.  Scoring of new data is then performed in SQL Server.</p>
+
+<p>Scientists who are testing and developing solutions can work from the convenience of their preferred IDE on their client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx">setting the computation context to SQL</a> (see  <strong>R</strong> or <strong>Python</strong> folder for code).  They can also deploy the completed solutions to SQL Server 2017 by embedding calls to R or Python in stored procedures. These solutions can then be further automated by the use of SQL Server Integration Services and SQL Server agent: a PowerShell script (.ps1 file) automates the running of the SQL code.</p>
 
 <p><a name="first"></a></p>
 
@@ -66,298 +70,106 @@
 <h2 id="system-requirements">System Requirements</h2>
 <hr />
 
-<div class="highlighter-rouge"><pre class="highlight"><code>To run the scripts requires the following:
+<div class="highlighter-rouge"><pre class="highlight"><code>Running the R or Pythong scripts requires the following:
 </code></pre>
 </div>
 
 <ul>
-  <li>SQL Server 2017 with Machine Learning Services (In-Database) installed and configured</li>
+  <li>SQL server 2017 with RevoscalePy (version 9.2) and MicrosoftML (version 1.5.0) installed and configured;</li>
   <li>The SQL user name and password, and the user configured properly to execute R scripts in-memory;</li>
   <li>SQL Database which the user has write permission and execute stored procedures;</li>
   <li>For more information about Machine Learning Services in SQL Server, please visit: <a href="https://msdn.microsoft.com/en-us/library/mt604847.aspx">https://msdn.microsoft.com/en-us/library/mt604847.aspx</a></li>
 </ul>
 
-<p>This code was tested using SQL Server 2017, and assumes that SQL Server with Python Service was installed. The installation process can be found <a href="install.md">here</a>.</p>
+<p>This code was tested using SQL Server 2017, and assumes that SQL Server with ML Services was installed. The installation process can be found <a href="setupSQL.html">here</a>.</p>
 
 <h2 id="data">Data</h2>
 <hr />
 
-<p>The images used for this solution consist of asmall upper body clothing texture imagesset of 1716 images. Each image is annotated
-as one of 11 different textures. All images were scraped using Bing Image Search and hand-annotated. The figure below shows
-examples for the 11 categories.</p>
-
-<div align="center">
-    <figure>
-        <img src="images/152.jpg" alt="argyle" title="argyle" width="150px" />
-        <figcaption>Argyle</figcaption>
-    </figure>
-    <figure>
-        <img src="images/403.jpg" alt="checkered" title="checkered" width="150px" />
-        <figcaption>Checkered</figcaption>
-    </figure>
-    <figure>
-        <img src="images/319.jpg" alt="dotted" title="dotted" width="150px" />
-        <figcaption>Dotted</figcaption>
-    </figure>
-    <figure>
-        <img src="images/253.jpg" alt="floral" title="floral" width="110px" />
-        <figcaption>Floral</figcaption>
-    </figure>
-    <figure>
-        <img src="images/352.jpg" alt="herringbone" title="herringbone" width="150px" />
-        <figcaption>Herringbone</figcaption>
-    </figure>
-    <figure>
-        <img src="images/241.jpg" alt="houndstooth" title="houndstooth" width="110px" />
-        <figcaption>Houndstooth</figcaption>
-    </figure>
-    <figure>
-        <img src="images/111.jpg" alt="leopard" title="leopard" width="150px" />
-        <figcaption>Leopard</figcaption>
-    </figure>
-    <figure>
-        <img src="images/1248.jpg" alt="paisley" title="paisley" width="110px" />
-        <figcaption>Paisley</figcaption>
-    </figure>
-    <figure>
-        <img src="images/700.jpg" alt="striped" title="striped" width="110px" />
-        <figcaption>Striped</figcaption>
-    </figure>
-    <figure>
-        <img src="images/736.jpg" alt="tartan" title="tartan" width="150px" />
-        <figcaption>Tartan</figcaption>
-    </figure>
-    <figure>
-        <img src="images/75.jpg" alt="zebra" title="zebra" width="120px" />
-        <figcaption>Zebra</figcaption>
-    </figure>
-
-</div>
+<p>This solution uses a preprocessed version of the <a href="http://scikit-learn.org/stable/datasets/twenty_newsgroups.html">NewsGroups20</a>, containing a Subject, a Text, and a Label (20 classes). It has a similar structure to a support ticket data set which would also have two data fields: Title, and Problem description. Thus, you can easily change this solution to use your support ticket data simply by providing the same structure for the test and train datasets.</p>
 
 <p><a href="tables.html">Click here</a> to view the SQL database tables created in this solution.</p>
 
-<h2 id="end-to-end-run">End-to-end Run</h2>
-<hr />
+<h2 id="workflow">Workflow</h2>
 
-<p>In the <strong>Python</strong> folder,the <strong>run_image_similarity.py</strong> file contains the code to run this solution. You can also run through all the code with the <strong>Train Model</strong> <a href="jupyter.html">Jupyter notebook</a> in this directory.</p>
+<p>The file <strong>R/modeling_main.R</strong> or <strong>Python/modeling_main.py</strong> enables the user to define the input and perform all the steps. Inputs are: paths to the raw data files, database name, server name, username and password.
+The database is created if necessary, and the connection string as well as the SQL compute context are defined.</p>
 
-<p>Since a model has already been built, you can also skip to the <strong>Test Model</strong> <a href="jupyter.html">Jupyter notebook</a> to use the model to find similar images for a new image. Try out one of the images in the notebook or try an image of your own.</p>
+<p>The steps below describe the process which applies identically to the R or Python code.</p>
 
 <p><a name="step1"></a></p>
 
-<h3 id="step-1-featurization-of-images-with-pre-trained-dnn-model">Step 1: Featurization of images with pre-trained DNN model</h3>
+<h3 id="step-1-loading-the-data-to-sql-server">Step 1: Loading the data to SQL Server</h3>
 <hr />
 
-<p>The <code class="highlighter-rouge">featurize_images</code> function generates features from the images using a pre-trained Resnet in <code class="highlighter-rouge">microsoftml</code>. The input is the FileTable named in the <code class="highlighter-rouge">TABLE_IMAGES</code> variable.  This table contains the images, the output is the SQL Table named in the <code class="highlighter-rouge">TABLE_FEATURE</code> variable,  which saves the images’ path, label,
-and DNN features. The dimension of the features depends on which Resnet Model is used in this step. Here we used Resnet18 which generates 512-dimensional features for each image.</p>
+<p>The NewsGroups20 data has already been downloaded and preprocessed in R and Python, then saved to disk. The raw data has been uploaded to SQL Server. It consists of:</p>
 
-<ol>
-  <li>
-    <p>First, get the images path from the FileTable, map the distinct categories of all the images to factor labels.</p>
-  </li>
-  <li>
-    <p>Second, get a label for each image based on its category.</p>
-  </li>
-  <li>
-    <p>Third, calculate the features using <code class="highlighter-rouge">microsoftml</code> library given the images path.</p>
-  </li>
-</ol>
+<ul>
+  <li>News_Train: Training set.</li>
+  <li>News_Test: Testing set.</li>
+  <li>Label_Names: Link between the Label integers and the Label names.</li>
+</ul>
+
+<p>The preprocessing consists of:</p>
+
+<ul>
+  <li>Separating the Subject from the rest of the text in the text variable. This creates two separate text variables: “Subject” and “Text”. In this context, the data set has a similar structure to a Support Ticket classification problem.</li>
+  <li>Remove unnecessary words or special characters (“\t”, “\n” etc.).</li>
+  <li>Remove rows with an empty text body.</li>
+  <li>Add an Id variable.</li>
+</ul>
 
 <p><a name="step2"></a></p>
 
-<h3 id="step-2-prepare-trainingtestingevaluation-set">Step 2: Prepare training/testing/evaluation set</h3>
+<h3 id="step-2-create-features-on-the-fly-for-the-training-set-and-train-the-model">Step 2: Create features on the fly for the training set and train the model</h3>
 <hr />
 
-<p>The <code class="highlighter-rouge">prepare_data</code> function prepares the training/testing/evaluation image set.</p>
+<p>For feature engineering, we want to featurize the text variables in the data: Subject and Text. 
+The Subject and Text are featurized separately in order to give to the words in the Subject the same weight as those in the Text. This approach is also applicable to Support ticket Classification problems.</p>
+
+<p>For each of the Subject and the Text separately, we:</p>
+
+<ul>
+  <li>Remove stopwords, diacritics, punctuation and numbers.</li>
+  <li>Change capital letters to lower case.</li>
+  <li>Hash the different words and characters.</li>
+</ul>
+
+<p>The parameters or options can be further optimized by parameter sweeping.</p>
+
+<p>This is done by following these steps:</p>
 
 <ol>
   <li>
-    <p>Randomly split all the images into training/testing set based on category information and train/test ratio. You can change the parameter <code class="highlighter-rouge">ratioTrainTest</code> according to the number of total images. For example, if the <code class="highlighter-rouge">ratioTrainTest = 0.7</code>, then for each category, randomly select 70% images as training images and the left 30% images as testing images.</p>
+    <p>Get the factor levels of the label in the order of encounter based on the Id, serialize them, and save them to SQL Server for future use.</p>
   </li>
   <li>
-    <p>Once the testing images were inserted into the SQL table, we generate evaluation image set based on testing images since we do not want to evaluation images overlap with the training images.</p>
+    <p>Define the text transformation to be used to generate features, in the form of a list. It will be applied on the fly during training and testing.</p>
   </li>
   <li>
-    <p>Randomly select images from each category as query images, and then randomly select 1 positive image from the same category and some negative images from the other categories. So for each query image, we create 101 image pairs. Users also can set up parameter <code class="highlighter-rouge">maxQueryImgsPerSubdir</code>
- to decide how many query images they want to select from each category, and set up parameter <code class="highlighter-rouge">maxNegImgsPerQueryImg</code> to decide how many negative images they want to select for each query image.</p>
-  </li>
-  <li>
-    <p>For example, in this sample, we set up <code class="highlighter-rouge">maxQueryImgsPerSubdir = 20</code> and <code class="highlighter-rouge">maxNegImgsPerQueryImg = 100</code>, finally, the evaluation set contains 220 query images since the image data contains 11 categories, and each query image has 101 candidates (1 positive image and 100 negative images).</p>
+    <p>Train a multiclass logistic regression on the training set, using the text transformation list.</p>
   </li>
 </ol>
+
+<p>The model trained is then serialized and saved to SQL Server for future use.</p>
 
 <p><a name="step3"></a></p>
 
-<h3 id="step-3-training-multi-class-classifier">Step 3: Training multi-class classifier</h3>
+<h3 id="step-3-create-features-on-the-fly-for-the-testing-set-make-predictions-and-evaluate-the-model">Step 3: Create features on the fly for the testing set, make predictions, and evaluate the model</h3>
 <hr />
 
-<p>Once the features are computed, and the training images and testing images are inserted into the SQL table, we can use them in the <code class="highlighter-rouge">train_classifier</code> function to train a neural network model using microsofotml library and then save the model into SQL table.</p>
+<p>In the same fashion, we call the prediction function on the testing set News_Test. It makes predictions while featurizing the text variables (Subject and Text) separately on the fly. This will automatically use the same text transformation as in the training, encoded in logistic_model.</p>
 
-<p>1) Get the DNN features for the training images and testing images from the feature table named in  <code class="highlighter-rouge">TABLE_FEATURE</code>, then train multi-class classifier using neural network algo in microsoftml library. Finally, evaluate the performance of the classifier using testing images.</p>
+<p>Once we get the predictions, we perform an inner join with the “Label_Names” table in order to get the names of the predicted labels.</p>
 
-<p>2) Overall accuracy is calculated to measure the performance of the classifier.</p>
+<p>Finally, we compute performance metrics in order to evaluate the model for this multi-class classification problem.</p>
 
-<table class="table">
-        <thead>
-            <tr>
-                <th>Pre-trained model</th>
-                <th>Classifier</th>
-                <th>Accuracy on train set</th>
-                <th>Accuracy on test set</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Resnet18</td>
-                <td>rx_neural_network</td>
-                <td>89.7%</td>
-                <td>75.1%</td>
-            </tr>
-        </tbody>
-    </table>
+<ul>
+  <li>Micro Average Accuracy: It is the overall accuracy, which corresponds to the number of correct class predictions divided by the total number of observations in the testing set (ie. rate of correct classification). In this sense, performing poorly on some rare classes but very accurately predicting the rest might still give a good result.</li>
+  <li>Macro Average Accuracy: It corresponds to the average of the per-class accuracy. In this sense, it treats all the classes equally, even if some of the classes are rare.</li>
+</ul>
 
-<p>3) Get the predicted scores of all the images in training and testing table using trained classifier, and save the predicted scores into SQL table named in <code class="highlighter-rouge">TABLE_SCORE</code>. Here we use all the images as the candidates for the last step. Users also can have their own candidate images. To get the predicted scores for users’ own candidate images, first, you have to featurize the candidate images using pre-trained Resnet, and then load the classifier to calculate the predicted scores for your own candidate images.</p>
-
-<p><a name="step4"></a></p>
-
-<h3 id="step-4-evaluate-model">Step 4: Evaluate model</h3>
-<hr />
-
-<p>Once the model and the predicted scores of all the images are saved into SQL table, we can get the predicted scores from the table named in <code class="highlighter-rouge">TABLE_SCORE</code> for all the image pairs in evaluation table named in <code class="highlighter-rouge">TABLE_RANKING</code>. Based on the predicted scores, we can calculate the distance between each image pair to measure
-their similarity so that we can evaluate the performance of the model in terms of ranking.</p>
-
-<ol>
-  <li>
-    <p>Load the predicted scores for all the images, for example, in this sample, the image data contains 11 categories, so the predicted score is a 11-dimensional vector for each image.</p>
-  </li>
-  <li>
-    <p>Load the image pairs from the evaluation table, for each image pair, we can get two 11-dimensional vectors, we calculate L2 and Cosine distance between these two vectors to measure the similarity. So for each image pair, we get two distances.</p>
-  </li>
-  <li>
-    <p>We calculate top 1, 2, 4, 5, 8, 10, 15, 20, 28 and 32 accuracy to measure the ranking performance.</p>
-  </li>
-  <li>
-    <p>Ranking performance on evaluation images.</p>
-
-    <p align="center">
- <img src="images/ranking_performance.jpg" alt="alt text" height="300" />
- </p>
-  </li>
-</ol>
-
-<p><a name="step5"></a></p>
-
-<h3 id="step-5-ranking-candidates-for-each-query-image">Step 5: Ranking candidates for each query image</h3>
-<hr />
-
-<p>Once the accuracy of the image ranking system satisfy the requirement, we can rank the candidates for the query images.</p>
-
-<ol>
-  <li>
-    <p>In order to get the similar images for each query image quickly, we have to make the predicted scores of all the candidate images ready before this step. We explained how to get the predicted scores for users’ own candidate images in step 3. So we assume
-the predicted scores of all the candidate images are already saved in SQL table named in <code class="highlighter-rouge">TABLE_SCORE</code>, we just need to load the predicted scores for all the candidate images from the SQL table. We don’t need to calculate them in this step.</p>
-  </li>
-  <li>
-    <p>Assume all the query images are already saved in SQL table named in <code class="highlighter-rouge">TABLE_QUERY</code>. we load the query images from the SQL table, and then featurize the query images using pre-trained Resnet, here you have to used the same pre-trained model which used in the step 1.</p>
-  </li>
-  <li>
-    <p>Load the model which trained in step 3 form SQL table named in <code class="highlighter-rouge">TABLE_MODEL</code>, and calculate the predicted scores for all the query images using the model.</p>
-  </li>
-  <li>
-    <p>Calculate the Cosine distance between each query image and all the candidates, based on the distance, return top K similar images for each query images. Users can set up parameter <code class="highlighter-rouge">TOP_K_CANDIDATES</code> to decide how many similar images should be returned for each query image.
- For example, here we set <code class="highlighter-rouge">TOP_K_CANDIDATES</code> equal to 5, so in the result table named in <code class="highlighter-rouge">TABLE_RESULTS</code>, each query image has 10 similar images.</p>
-  </li>
-</ol>
-
-<p>The following table shows a sample results in result table <code class="highlighter-rouge">@results_table</code>.</p>
-
-<table class="table">
-	<thead>
-		<tr>
-			<th>Query_Images</th>
-			<th>Top_5_Candidates</th>
-			<th>Distance</th>
-		</tr>
-	</thead>
-	<tbody class="mid">
-		<tr>
-			<td><img src="images/3135.jpg" width="50px" /> zebra\3135.jpg</td>
-            <td><img src="images/3135.jpg" width="50px" /> zebra\3135.jpg</td>
-            <td>0</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/101.jpg" width="50px" /> zebra\101.jpg</td>
-            <td>6.05E-09</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/839.jpg" width="50px" /> zebra\839.jpg</td>
-            <td>8.48E-08</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2311.jpg" width="50px" /> zebra\2311.jpg</td>
-            <td>8.65E-08</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/802.jpg" width="50px" /> zebra\802.jpg</td>
-            <td>2.02E-07</td>
-        </tr>
-        <tr>
-			<td><img src="images/2562.jpg" width="50px" /> floral\2562.jpg</td>
-            <td><img src="images/2562.jpg" width="50px" /> floral\2562.jpg</td>
-            <td>0</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2590.jpg" width="50px" /> floral\2590.jpg</td>
-            <td>0.000515907</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/3316.jpg" width="50px" /> floral\3316.jpg</td>
-            <td>0.001025471</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2568.jpg" width="50px" /> floral\2568.jpg</td>
-            <td>0.00104754</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/4025.jpg" width="50px" /> floral\4025.jpg</td>
-            <td>0.001170971</td>
-        </tr>
-        <tr>
-			<td><img src="images/3093.jpg" width="50px" /> leopard\3093.jpg</td>
-            <td><img src="images/3093.jpg" width="50px" /> leopard\3093.jpg</td>
-            <td>1.11E-16</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2386.jpg" width="50px" /> leopard\2386.jpg</td>
-            <td>4.72E-07</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/875.jpg" width="50px" /> leopard\875.jpg</td>
-            <td>5.72E-07</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2393.jpg" width="50px" /> leopard\2393.jpg</td>
-            <td>1.28E-06</td>
-        </tr>
-        <tr>
-			<td></td>
-            <td><img src="images/2397.jpg" width="50px" /> leopard\2397.jpg</td>
-            <td>1.35E-06</td>
-        </tr>
-
-    </tbody>
-</table>
+<p>These two metrics should thus be analyzed together, especially in the case of class imbalances.</p>
 
 <h2 id="template-contents">Template Contents</h2>
 <hr />
@@ -393,6 +205,7 @@ the predicted scores of all the candidate images are already saved in SQL table 
               <div class="toc">
                 <li><a href="contents.html">Packet Contents</a></li>
                 <li><a href="sitemap.html">Site Map</a></li>
+                <li><a href="https://aka.ms/ml-server-samples">Other ML Server Solutions</a></li>
 
             </div>
           </div><!--/col -->
@@ -412,7 +225,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 
-<script>
+<!-- <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -421,7 +234,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
   ga('create', 'UA-88854735-5', 'auto');
   ga('send', 'pageview');
 
-</script>
+</script> -->
     
 
   </body>

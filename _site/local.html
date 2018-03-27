@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-    <title>Setup for Local Code Execution</title>
+    <title>Quick Start</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Use SQL Server 2017 + ML Services with Python to execute a transfer learning algorithm to detect image similarity.">
     <meta name="author" content="Microsoft">
@@ -27,52 +27,31 @@
             <p>Implemented with Microsoft Machine Learning Services</p>
           </div>
               <div class="content">
-                <h2 id="setup-for-local-code-execution">Setup for Local Code Execution</h2>
+                <h2 id="quick-start">Quick Start</h2>
+<hr />
 
-<p>You can execute code on your local computer and push the computations to the SQL Server on the VM  that was created by the Azure AI Gallery. But first you must perform the following steps.</p>
+<p>There are multiple ways you can try this solution package out for yourself.</p>
 
-<h2 id="on-the-vm-configure-vm-for-remote-access">On the VM: Configure VM for Remote Access</h2>
-
-<p>Connect to the VM to perform the following steps.</p>
-
-<p>You must open the Windows firewall on the VM to allow a connection to the SQL Server. To open the firewall, execute the following command in a PowerShell window on the VM:</p>
-
-<p><code class="highlighter-rouge">
-netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protocol=tcp localport=1433 
-</code></p>
-
-<h2 id="on-your-local-computer">On Your Local Computer</h2>
-<p>Now switch to your local computer and perform the following steps to get the code and setup your local environment.</p>
-
-<h3 id="obtain-code">Obtain code</h3>
-
-<p>To copy the solution code to your computer:</p>
-<ol>
-  <li>Open a PowerShell window.</li>
+<ul>
   <li>
-    <p>Navigate to the directory of your choice, and execute the following command:</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/Microsoft/ml-server-image-similarity ImageSimilarity
-</code></pre>
-    </div>
+    <p>Visit the <a href="http://aka.ms/image-similarity">Azure AI Gallery</a> and use the <code class="highlighter-rouge">Deploy</code> button.  All necessary software will be installed and configured for you as well as the initial deployment of the solution.  You will be all set to explore the code and <a href="jupyter.html">try out the model</a> on the deployed virtual machine.</p>
   </li>
-</ol>
+  <li>
+    <p>For an On-Prem installation:</p>
 
-<p>This will create a folder <strong>ImageSimilarity</strong> containing the full solution package.</p>
-
-<h3 id="r">R</h3>
-
-<p>Perform these steps on your local computer.</p>
-
-<p>If you use your local computer you will need to have a copy of R Client on your local machine, <a href="rstudio.html"> installed and configured</a> for your IDE.</p>
-
-<h3 id="python">Python</h3>
-
-<p>Perform these steps on your local computer.</p>
-
-<p>See <a href="https://docs.microsoft.com/en-us/machine-learning-server/install/python-libraries-interpreter">How to install custom Python packages and interpreter locally on Windows</a>.</p>
-
-<p><a href="CIG_Workflow.html#step2">Return to Typical Workflow for Azure AI Gallery Deployment<a></a></a></p>
+    <ul>
+      <li>
+        <p>Follow <a href="SetupSQL.html">these instructions</a> to setup the server.</p>
+      </li>
+      <li>
+        <p>Once the server is configured, use the <a href="Powershell_Instructions.html">PowerShell Instructions</a> for a quick deployment of the solution.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>You can then follow the steps in <a href="data-scientist.html">For the Data Scientist</a> or <a href="dba.html">For the Database Analyst</a>.</p>
+  </li>
+</ul>
 
               </div>  
           </div><!--/col -->
@@ -95,6 +74,7 @@ netsh advfirewall firewall add rule name="SQLServer" dir=in action=allow protoco
               <div class="toc">
                 <li><a href="contents.html">Packet Contents</a></li>
                 <li><a href="sitemap.html">Site Map</a></li>
+                <li><a href="https://aka.ms/ml-server-samples">Other ML Server Solutions</a></li>
 
             </div>
           </div><!--/col -->
@@ -114,7 +94,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 
-<script>
+<!-- <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -123,7 +103,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
   ga('create', 'UA-88854735-5', 'auto');
   ga('send', 'pageview');
 
-</script>
+</script> -->
     
 
   </body>

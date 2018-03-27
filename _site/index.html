@@ -27,16 +27,17 @@
             <p>Implemented with Microsoft Machine Learning Services</p>
           </div>
               <div class="content">
-                <p>This solution provides a template (including training, testing, evaluation, and ranking process) to execute a transfer learning algorithm for image similarity using a pre-trained DNN model and <a href="https://docs.microsoft.com/en-us/sql/advanced-analytics/python/sql-server-python-services">SQL Server Machine Learning Service with Python</a>. We consider category-level image similarity in this solution. The data used for this solution is a small upper body clothing texture dataset consisting of 1716 images, where each image is annotated as one of 11 different textures. All images were scraped using Bing Image Search and hand-annotated.</p>
+                <p>When a customer sends a support ticket, it is important to route it to the right team to examine the issue and solve it in the fastest way possible. This solution trains a model to classify text data.  It uses a preprocessed version of the NewsGroups20, containing a Subject (extracted from the raw text data), a Text, and a Label (20 classes). While this is not support ticket data, it has a similar structure to a support ticket data set which would also have two data fields: Title and Problem description.</p>
 
-<p>For customers who prefer an on-premise solution, the implementation with Microsoft Machine Learning Services is a great option that takes advantage of the powerful combination of SQL Server and the Python languages. We have modeled the steps in the template after a realistic team collaboration on a data science process. Data scientists do the data preparation, model training, and evaluation from their favorite IDE. DBAs can take care of the deployment using SQL stored procedures with embedded code.  We also show how each of these steps can be executed on a SQL Server client environment such as SQL Server Management Studio. A Windows PowerShell script that executes the end-to-end setup and modeling process is provided for convenience. </p>
+<p>The preprocessed training and testing sets are first uploaded to SQL Server. Text featurization is then defined. It consists of removing punctuation, diacritics, numbers, and predefined stopwords, then hashing the 2-gram words and 3-gram characters. The Subject and Text are featurized separately in order to give the words in the Subject as much weight as those in the Text, which is larger. Treating those two variables separately has proven to increase slightly the models predictive power in our experiments.</p>
+
+<p>A multiclass logistic regression is then trained on the training set, which is featurized on the fly. The model is saved to SQL Server, and then used to make predictions on the testing set, which is also featurized on the fly at the time of the predictions. Finally, the model is evaluated through the computation of micro and macro average accuracy.</p>
+
+<p>For customers who prefer an on-premise solution, the implementation with Microsoft Machine Learning Services is a great option that takes advantage of the powerful combination of SQL Server and the R and Python languages. We have modeled the steps in the template after a realistic team collaboration on a data science process. Data scientists do the data preparation, model training, and evaluation from their favorite IDE. DBAs can take care of the deployment using SQL stored procedures with embedded code.  We also show how each of these steps can be executed on a SQL Server client environment such as SQL Server Management Studio. A Windows PowerShell script that executes the end-to-end setup and modeling process is provided for convenience.</p>
 
 <p>This solution starts with data stored in SQL Server.  The data scientist works from the convenience of an IDE on her client machine, while <a href="https://msdn.microsoft.com/en-us/library/mt604885.aspx">setting the computation context to SQL</a>.  When she is done, her code is operationalized as stored procedures in the SQL Database.</p>
 
-<p>A small Jupyter notebook <strong>Test Model.ipynb</strong> is used to submit a new image and see the 10 most similar images returned from the model.</p>
-
-<p><img src="images/rankimages.png" /></p>
-
+<p>New data is scored using the <code class="highlighter-rouge">score</code> stored procedure in SQL.  You can view the predicted labels in the output table <code class="highlighter-rouge">Predicted_New</code>, or visualize both test and new data and predicted labels in the  file</p>
 
               </div>  
           </div><!--/col -->
@@ -59,6 +60,7 @@
               <div class="toc">
                 <li><a href="contents.html">Packet Contents</a></li>
                 <li><a href="sitemap.html">Site Map</a></li>
+                <li><a href="https://aka.ms/ml-server-samples">Other ML Server Solutions</a></li>
 
             </div>
           </div><!--/col -->
@@ -78,7 +80,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 
-<script>
+<!-- <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -87,7 +89,7 @@ This project has adopted the <a href="https://opensource.microsoft.com/codeofcon
   ga('create', 'UA-88854735-5', 'auto');
   ga('send', 'pageview');
 
-</script>
+</script> -->
     
 
   </body>
