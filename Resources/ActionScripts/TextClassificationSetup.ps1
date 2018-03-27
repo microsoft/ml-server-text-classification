@@ -34,8 +34,8 @@ $startTime = Get-Date
 $setupLog = "c:\tmp\text_setup_log.txt"
 Start-Transcript -Path $setupLog -Append
 $startTime = Get-Date
-Write-Host  "Start time:$startTime
-" 
+Write-Host  
+("Start time:$startTime")
 
 #$Prompt= if ($Prompt -match '^y(es)?$') {'Y'} else {'N'}
 $Prompt = 'N'
@@ -45,7 +45,6 @@ $Prompt = 'N'
 $SolutionName = "TextClassification"
 $SolutionFullName = "ml-server-text-classification"
 $Shortcut = "SolutionHelp.url"
-
 
 ### DON'T FORGET TO CHANGE TO MASTER LATER...
 $Branch = "dev" 
@@ -58,9 +57,6 @@ $Prompt = 'N'
 $MixedAuth = 'No'
 $InstallPowerShellUpdate = 'Yes'
 
-
-
-
 ###These probably don't need to change , but make sure files are placed in the correct directory structure 
 $solutionTemplateName = "Solutions"
 $solutionTemplatePath = "C:\" + $solutionTemplateName
@@ -70,27 +66,29 @@ $desktop = "C:\Users\Public\Desktop\"
 $scriptPath = $SolutionPath + "\Resources\ActionScripts\"
 $SolutionData = $SolutionPath + "\Data\"
 
-
-
-
 ##########################################################################
 #Clone Data from GIT
 ##########################################################################
 
-
 $clone = "git clone --branch $Branch --single-branch https://github.com/Microsoft/$SolutionFullName $solutionPath"
 
-if (Test-Path $SolutionPath) { Write-Host "Solution has already been cloned
-"}
-ELSE {Invoke-Expression $clone}
+if (Test-Path $SolutionPath) 
+    {
+    (Write-Host "Solution has already been cloned")
+    }
+else 
+    {
+    Invoke-Expression $clone
+    }
 
 If ($InstalR -eq 'Yes')
-{
-Write-Host "Installing R Packages"
-Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
+    {
+    Write-Host 
+    ("Installing R Packages")
+    Set-Location "C:\Solutions\$SolutionName\Resources\ActionScripts\"
 # install R Packages
-Rscript install.R 
-}
+    Rscript install.R 
+    }
 
 
 #################################################################
@@ -99,37 +97,36 @@ Rscript install.R
 
 
 if ($InstallPowerShellUpdate -eq 'Yes')
-{
-Write-Host "Installing SQLServer Power Shell Module or Updating to latest 
-"
-if (Get-Module -ListAvailable -Name SQLServer) 
-    {Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199}
-Else 
-    {Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+    {
 
-#Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted
-    Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force 
-}
+
+    if (Get-Module -ListAvailable -Name SQLServer) 
+        {
+        Write-Host 
+        ("Updating SQLServer Power Shell Module")
+        Update-Module -Name "SQLServer" -MaximumVersion 21.0.17199
+        Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force
+        }
+    Else 
+        {
+        Write-Host 
+        ("Installing SQLServer Power Shell Module")
+        Install-Module -Name SqlServer -RequiredVersion 21.0.17199 -Scope AllUsers -AllowClobber -Force}
+        Import-Module -Name SqlServer -MaximumVersion 21.0.17199 -Force 
+        }
 
 ## if FileStreamDB is Required Alter Firewall ports for 139 and 445
 if ($EnableFileStream -eq 'Yes')
     {
     netsh advfirewall firewall add rule name="Open Port 139" dir=in action=allow protocol=TCP localport=139
     netsh advfirewall firewall add rule name="Open Port 445" dir=in action=allow protocol=TCP localport=445
-    Write-Host "Firewall has been opened for filestream access..."
+    Write-Host 
+    ("Firewall has been opened for filestream access")
     }
-
- 
-
-
-
 
 ############################################################################################
 #Configure SQL to Run our Solutions 
 ############################################################################################
-
-#Write-Host -ForegroundColor 'Cyan' " Switching SQL Server to Mixed Mode"
-
 
 
 $Query = "SELECT SERVERPROPERTY('ServerName')"
@@ -137,61 +134,57 @@ $si = invoke-sqlcmd -Query $Query
 $si = $si.Item(0)
 
 $serverName = if([string]::IsNullOrEmpty($servername)) {$si} Else {$ServerName}
-
+Write-Host 
+("Servername set to $serverName")
 
 ### Change Authentication From Windows Auth to Mixed Mode 
 If ($MixedAuth -eq 'Yes')
-{ Write-Host "Changing SQL Authentication to Mixed Mode
-"
-Invoke-Sqlcmd -Query "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2;" -ServerInstance "LocalHost" 
-}
+    {
+    Write-Host 
+    ("Changing SQL Authentication to Mixed Mode")
+    Invoke-Sqlcmd -Query "EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'LoginMode', REG_DWORD, 2;" -ServerInstance "LocalHost" 
 
-Write-Host "Configuring SQL to allow running of External Scripts
-"
+    $Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
+    Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+
+    $Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
+    Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
+    }
+
 ### Allow Running of External Scripts , this is to allow R Services to Connect to SQL
-Invoke-Sqlcmd -Query "EXEC sp_configure  'external scripts enabled', 1"
+    Write-Host 
+    ("Configuring SQL to allow running of External Scripts")
+    Invoke-Sqlcmd -Query "EXEC sp_configure  'external scripts enabled', 1"
 
 ### Force Change in SQL Policy on External Scripts 
-Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
-Write-Host "SQL Server Configured to allow running of External Scripts
-"
+    Invoke-Sqlcmd -Query "RECONFIGURE WITH OVERRIDE" 
+    Write-Host 
+    ("SQL Server Configured to allow running of External Scripts")
 
 ### Enable FileStreamDB if Required by Solution 
 if ($EnableFileStream -eq 'Yes') 
     {
-# Enable FILESTREAM
-        $instance = "MSSQLSERVER"
-        $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where-object {$_.InstanceName -eq $instance}
-        $wmi.EnableFilestream(3, $instance) 
-        Stop-Service "MSSQ*" -Force
-        Start-Service "MSSQ*"
- 
-    
-        #Import-Module "sqlps" -DisableNameChecking
-        Invoke-Sqlcmd "EXEC sp_configure filestream_access_level, 2"
-        Invoke-Sqlcmd "RECONFIGURE WITH OVERRIDE"
-        Stop-Service "MSSQ*"
-        Start-Service "MSSQ*"
+    $instance = "MSSQLSERVER"
+    $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where-object {$_.InstanceName -eq $instance}
+    $wmi.EnableFilestream(3, $instance) 
+    Stop-Service "MSSQ*" -Force
+    Start-Service "MSSQ*"
+
+#Import-Module "sqlps" -DisableNameChecking
+    Invoke-Sqlcmd "EXEC sp_configure filestream_access_level, 2"
+    Invoke-Sqlcmd "RECONFIGURE WITH OVERRIDE"
+    Stop-Service "MSSQ*"
+    Start-Service "MSSQ*"
     }
 ELSE
     { 
-    Write-Host "Restarting SQL Services "
+    Write-Host 
+    ("Restarting SQL Services")
     ### Changes Above Require Services to be cycled to take effect 
     ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
     Restart-Service -Name "MSSQ*" -Force
 }
-### Start the SQL Service 
-#Start-Service -Name "MSSQ*"
-#Write-Host -ForegroundColor 'Cyan' " SQL Services Restarted"
 
-if($MixedAuth -eq 'Yes')
-{
-$Query = "CREATE LOGIN $username WITH PASSWORD=N'$password', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF"
-Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
-
-$Query = "ALTER SERVER ROLE [sysadmin] ADD MEMBER $username"
-Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
-}
 ####Instal Python 
 
 
@@ -215,7 +208,9 @@ Invoke-Sqlcmd -Query $Query -ErrorAction SilentlyContinue
 
 
 ###Install SQL CU 
-{Write-Host " Checking SQL CU Version If Behind install Latest CU...."}
+
+Write-Host 
+("Checking SQL CU Version If Behind install Latest CU")
 
 $Query = "SELECT CASE 
 WHEN  
@@ -229,46 +224,41 @@ $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
 $RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
 IF ($RequireCuUpdate -eq 0) 
-{
-##WRITE-Host "CU Needs Updating will be done at end of Script
-#"
-WRITE-Host "Downloading Latest CU
-"
+    {
+    WRITE-Host 
+    ("Downloading Latest CU")
 
-Start-BitsTransfer -Source "https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB4056498-x64.exe" -Destination c:\tmp\SQLServer2017-KB4056498-x64.exe  
+    Start-BitsTransfer -Source "https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB4056498-x64.exe" -Destination c:\tmp\SQLServer2017-KB4056498-x64.exe  
 
-Write-Host "CU has been Downloaded now to install , go have a cocktail as this takes a while
-"
+    Write-Host 
+    ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
 
-Invoke-Expression "c:\tmp\SQLServer2017-KB4056498-x64.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
-Write-Host "CU Install has commenced
-"
-Write-Host "Powershell time to take a nap
-"
-Start-Sleep -s 1000
-Write-Host "Powershell nap time is over
-"
-}
+
+    Invoke-Expression "c:\tmp\SQLServer2017-KB4056498-x64.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
+    Write-Host 
+    ("CU Install has commenced")
+    Write-Host 
+    ("Powershell time to take a nap")
+    Start-Sleep -s 1000
+    Write-Host 
+    ("Powershell nap time is over")
+    }
 ELSE 
-{Write-Host "CU is Current
-" }
-
-
+    {
+    Write-Host 
+    ("CU is Current")
+    }
 
 ####Run Configure SQL to Create Databases and Populate with needed Data
-$ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $InstallR $EnableFileStream"
-Invoke-Expression $ConfigureSQL 
-
-Write-Host "Done with configuration changes to SQL Server
-"
-
-
-
+    $ConfigureSql = "C:\Solutions\$SolutionName\Resources\ActionScripts\ConfigureSQL.ps1  $ServerName $SolutionName $InstallPy $InstallR $EnableFileStream"
+    Invoke-Expression $ConfigureSQL 
+    Write-Host 
+    ("Done with configuration changes to SQL Server")
 
 If ($UsePowerBI -eq 'Yes') 
 {
-    Write-Host "Installing latest Power BI...
-    "
+    Write-Host 
+    ("This Solutions employees Power BI reports, so we need to install the latest version of Power BI")
     # Download PowerBI Desktop installer
     Start-BitsTransfer -Source "https://go.microsoft.com/fwlink/?LinkId=521662&clcid=0x409" -Destination powerbi-desktop.msi
 
@@ -277,8 +267,8 @@ If ($UsePowerBI -eq 'Yes')
 
     if (!$?) 
     {
-        Write-Host -ForeGroundColor Red "Error installing Power BI Desktop. Please install latest Power BI manually.
-        "
+    Write-Host -ForeGroundColor Red 
+    ("Error installing Power BI Desktop. Please install latest Power BI manually.")
     }
 }
 
@@ -287,8 +277,8 @@ If ($UsePowerBI -eq 'Yes')
 ##Create Shortcuts and Autostart Help File 
 Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
 Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
-Write-Host -ForeGroundColor cyan "Help Files Copied to Desktop
-"
+Write-Host 
+("Help Files Copied to Desktop")
 
 
 $WsShell = New-Object -ComObject WScript.Shell
@@ -300,49 +290,26 @@ $shortcut.Save()
 
 
 # install modules for sample website
+# install modules for sample website
 if($SampleWeb  -eq "Yes")
-    {
-    Set-Location $SolutionPath\Website\
-    npm install
-    Move-Item $SolutionPath\Website\server.js  c:\tmp\
-    sed -i "s/XXYOURSQLPW/$password/g" c:\tmp\server.js
-    sed -i "s/XXYOURSQLUSER/$username/g" c:\tmp\server.js
-    Move-Item  c:\tmp\server.js $SolutionPath\Website
-    }
-
-
-
-# IF ($RequireCuUpdate -eq 0) 
-# {
-# WRITE-Host "Downloading Latest CU
-# "
-
-# Start-BitsTransfer -Source "https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB4056498-x64.exe" -Destination c:\tmp\SQLServer2017-KB4056498-x64.exe  
-
-# Write-Host "CU has been Downloaded now to install , go have a cocktail as this takes a while
-# "
-
-# Invoke-Expression "c:\tmp\SQLServer2017-KB4056498-x64.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
-# Write-Host "CU Install has commenced
-# "
-# Write-Host "Powershell time to take a nap
-# "
-# Start-Sleep -s 600
-# Write-Host "Powershell nap time is over
-# 
-# }
+{
+Set-Location $SolutionPath\Website\
+.\npm install
+(Get-Content $SolutionPath\Website\server.js).replace('XXYOURSQLPW', $password) | Set-Content $SolutionPath\Website\server.js
+(Get-Content $SolutionPath\Website\server.js).replace('XXYOURSQLUSER', $username) | Set-Content $SolutionPath\Website\server.js
+}
 
 ##Launch HelpURL 
 Start-Process "https://microsoft.github.io/$SolutionFullName/"
 
-
 $endTime = Get-Date
 
-Write-Host ("$SolutionFullName Workflow Finished Successfully!
-")
+Write-Host 
+("$SolutionFullName Workflow Finished Successfully!")
+
 $Duration = New-TimeSpan -Start $StartTime -End $EndTime 
-Write-Host ("Total Deployment Time = $Duration
-") 
+Write-Host 
+("Total Deployment Time = $Duration") 
 
 Stop-Transcript
 
@@ -354,7 +321,8 @@ Stop-Transcript
 }
 else 
 {
-    Write-Host "To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds"
+    Write-Host 
+    ("To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds")
     Start-Sleep -s 20
 
 
