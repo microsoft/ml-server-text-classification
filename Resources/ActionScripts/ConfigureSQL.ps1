@@ -180,7 +180,7 @@ throw
     Write-Host ("Finished loading data File(s).")
 
     Write-Host
-    ("Training Model and Scoring Data")
+    ("Training Model and Scoring Data in SQL with R scripts")
 
     $query = "EXEC Initial_Run_Once_R"
     Invoke-Sqlcmd -ServerInstance LocalHost -Database $dbName -Query $query -ConnectionTimeout  0 -QueryTimeout 0
@@ -240,7 +240,7 @@ if ($isCompatible -eq 'Yes'-and $InstallPy -eq 'Yes')
     ("Finished loading .csv File(s)")
 
     Write-Host 
-    ("Training Model and Scoring Data")
+    ("Training Model and Scoring Data in SQL with Python scripts")
     $query = "EXEC Inital_Run_Once_Py"
     Invoke-Sqlcmd -ServerInstance LocalHost -Database $dbName -Query $query -ConnectionTimeout  0 -QueryTimeout 0
 

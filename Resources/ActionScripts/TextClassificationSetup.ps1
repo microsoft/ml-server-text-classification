@@ -25,8 +25,30 @@ param(
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
         [Security.Principal.WindowsBuiltInRole] "Administrator")
         
-if ($isAdmin -eq 'True') 
+if ($isAdmin -eq 'False')  
+    {
+    Write-Host 
+    ("To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds")
+    Start-Sleep -s 20
+    Exit-PSHostProcess
+    EXIT 
+    }
+ELSE 
 {
+    ##Check to see is Advanced Analytics is installed
+$Query = 
+    "SELECT CASE WHEN SERVERPROPERTY('IsAdvancedAnalyticsInstalled') = 1 THEN 'Yes' ELSE 'No' END"
+    $IsAdv = Invoke-Sqlcmd -Query $Query 
+    $IsAdv  = $IsAdv.Item(0)
+    if($IsAdv -eq 'No') 
+    {
+    Write-Host
+    ("To run this solution , Please install SQLAdvanced Analytics")
+    Start-Sleep -s 20
+    }
+    ELSE 
+{
+
 $startTime = Get-Date
 
 $setupLog = "c:\tmp\text_setup_log.txt"
@@ -329,16 +351,8 @@ Stop-Transcript
     EXIT}
 
 }
-else 
-{
-    Write-Host 
-    ("To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds")
-    Start-Sleep -s 20
+}
 
-
-## Close Powershell 
-Exit-PSHostProcess
-EXIT }
 
 
 
