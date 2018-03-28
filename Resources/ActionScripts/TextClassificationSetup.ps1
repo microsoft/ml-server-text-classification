@@ -25,15 +25,8 @@ param(
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
         [Security.Principal.WindowsBuiltInRole] "Administrator")
         
-if ($isAdmin -eq 'False')  
-    {
-    Write-Host 
-    ("To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds")
-    Start-Sleep -s 20
-    Exit-PSHostProcess
-    EXIT 
-    }
-ELSE 
+if ($isAdmin -eq 'True')  
+ 
 {
     ##Check to see is Advanced Analytics is installed
 $Query = 
@@ -352,6 +345,14 @@ Stop-Transcript
 
 }
 }
+ELSE
+    {
+    Write-Host 
+    ("To install this Solution you need to run Powershell as an Administrator. This program will close automatically in 20 seconds")
+    Start-Sleep -s 20
+    Exit-PSHostProcess
+    EXIT 
+    }
 
 
 
