@@ -247,7 +247,7 @@ ELSE 0
 END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
-$RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
+##$RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
 IF ($RequireCuUpdate -eq 0) 
     {
     WRITE-Host 
