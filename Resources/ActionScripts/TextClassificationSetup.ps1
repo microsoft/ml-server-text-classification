@@ -25,22 +25,24 @@ param(
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
         [Security.Principal.WindowsBuiltInRole] "Administrator")
         
-if ($isAdmin -eq 'True')  
+if ($isAdmin -eq 'True')
+{
+
  
-{
-    ##Check to see is Advanced Analytics is installed
-$Query = 
-    "SELECT CASE WHEN SERVERPROPERTY('IsAdvancedAnalyticsInstalled') = 1 THEN 'Yes' ELSE 'No' END"
-    $IsAdv = Invoke-Sqlcmd -Query $Query 
-    $IsAdv  = $IsAdv.Item(0)
-    if($IsAdv -eq 'No') 
-    {
-    Write-Host
-    ("To run this solution , Please install SQLAdvanced Analytics")
-    Start-Sleep -s 20
-    }
-    ELSE 
-{
+# {
+#     ##Check to see is Advanced Analytics is installed
+# $Query = 
+#     "SELECT CASE WHEN SERVERPROPERTY('IsAdvancedAnalyticsInstalled') = 1 THEN 'Yes' ELSE 'No' END"
+#     $IsAdv = Invoke-Sqlcmd -Query $Query 
+#     $IsAdv  = $IsAdv.Item(0)
+#     if($IsAdv -eq 'No') 
+#     {
+#     Write-Host
+#     ("To run this solution , Please install SQLAdvanced Analytics")
+#     Start-Sleep -s 20
+#     }
+#     ELSE 
+# {Write-Host ("Advanced Analytics is present, set up can continue")
 
 $startTime = Get-Date
 
@@ -68,7 +70,7 @@ $EnableFileStream = 'No' ## If Solution Requires FileStream DB this should be 'Y
 $UsePowerBI = 'No' ## If Solution uses PowerBI
 $Prompt = 'N'
 $MixedAuth = 'No'
-$InstallPowerShellUpdate = 'Yes'
+$InstallPowerShellUpdate = 'No'
 
 ###These probably don't need to change , but make sure files are placed in the correct directory structure 
 $solutionTemplateName = "Solutions"
@@ -344,7 +346,7 @@ Stop-Transcript
     EXIT}
 
 }
-}
+#} uncomment this brace if we look for advanced anaytics 
 ELSE
     {
     Write-Host 
