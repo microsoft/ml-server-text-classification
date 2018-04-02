@@ -27,8 +27,6 @@ $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIde
         
 if ($isAdmin -eq 'True')
 {
-
- 
 # {
 #     ##Check to see is Advanced Analytics is installed
 # $Query = 
@@ -42,7 +40,8 @@ if ($isAdmin -eq 'True')
 #     Start-Sleep -s 20
 #     }
 #     ELSE 
-# {Write-Host ("Advanced Analytics is present, set up can continue")
+# {
+    Write-Host ("Advanced Analytics is present, set up can continue")
 
 $startTime = Get-Date
 
@@ -254,15 +253,20 @@ IF ($RequireCuUpdate -eq 0)
     {
     WRITE-Host 
     ("Downloading Latest CU")
+##cu3  
+    Start-BitsTransfer -Source "http://download.windowsupdate.com/d/msdownload/update/software/updt/2018/01/sqlserver2017-kb4052987-x64_a533b82e49cb9a5eea52cd2339db18aa4017587b.exe"
 
-    Start-BitsTransfer -Source "http://download.windowsupdate.com/c/msdownload/update/software/updt/2018/03/sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe" -Destination c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe  
+##CU4 
+    #Start-BitsTransfer -Source "http://download.windowsupdate.com/c/msdownload/update/software/updt/2018/03/sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe" -Destination c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe  
 
     Write-Host 
     ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
-
-
-    Invoke-Expression "c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
-    Write-Host 
+##CU3   
+    Invoke-Expression "c:\tmp\sqlserver2017-kb4052987-x64_a533b82e49cb9a5eea52cd2339db18aa4017587b.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
+ 
+##CU4 
+ ##   Invoke-Expression "c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
+   Write-Host 
     ("CU Install has commenced")
     Write-Host 
     ("Powershell time to take a nap")
