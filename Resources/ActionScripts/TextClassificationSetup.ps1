@@ -253,8 +253,13 @@ IF ($RequireCuUpdate -eq 0)
     {
     WRITE-Host 
     ("Downloading Latest CU")
+
+##cu1 
+    Start-BitsTransfer -Source "http://download.windowsupdate.com/d/msdownload/update/software/updt/2017/12/sqlserver2017-kb4038634-x64_a75ab79103d72ce094866404607c2e84ae777d43.exe" -Destination c:\tmp\sqlserver2017CU1.exe
+
+
 ##cu3  
-    Start-BitsTransfer -Source "http://download.windowsupdate.com/d/msdownload/update/software/updt/2018/01/sqlserver2017-kb4052987-x64_a533b82e49cb9a5eea52cd2339db18aa4017587b.exe"
+ ## Start-BitsTransfer -Source "http://download.windowsupdate.com/d/msdownload/update/software/updt/2018/01/sqlserver2017-kb4052987-x64_a533b82e49cb9a5eea52cd2339db18aa4017587b.exe" -Destination c:\tmp\sqlserver2017CU3.exe 
 
 ##CU4 
     #Start-BitsTransfer -Source "http://download.windowsupdate.com/c/msdownload/update/software/updt/2018/03/sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe" -Destination c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe  
@@ -262,7 +267,7 @@ IF ($RequireCuUpdate -eq 0)
     Write-Host 
     ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
 ##CU3   
-    Invoke-Expression "c:\tmp\sqlserver2017-kb4052987-x64_a533b82e49cb9a5eea52cd2339db18aa4017587b.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
+    Invoke-Expression "c:\tmp\sqlserver2017CU1.exe  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
  
 ##CU4 
  ##   Invoke-Expression "c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
