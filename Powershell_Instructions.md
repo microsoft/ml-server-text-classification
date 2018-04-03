@@ -39,13 +39,13 @@ Running this PowerShell script will create the data tables and stored procedures
 
 1. Log onto the machine that contains the SQL Server you wish to use.
 
-2. Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-image-similarity/master/Resources/ActionScripts/SetupVM.ps1" download>SetupVM.ps1</a> to your computer.
+2. Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-text-classification/dev/Resources/ActionScripts/TextClassificationSetup.ps1" download>TextClassificationSetup.ps1</a> to your computer.
 
 3. Open a command or PowerShell window as Administrator.
 
 4. CD to the directory where you downloaded the above .ps1 file and execute the command:
 
-    .\SetupVM.ps1
+    .\TextClassificationSetup.ps1
 
 5. Answer the prompts.
 

@@ -122,3 +122,4 @@ After evaluating the model, predictions are made on a new data set, News_To_Scor
 
 These new records can be seen in the second tab of the PowerBI report. 
 
+

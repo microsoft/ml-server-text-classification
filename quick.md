@@ -14,4 +14,3 @@ title: Quick Start
 
     * Once the server is configured, you can use the [PowerShell Instructions](Powershell_Instructions.html) for a quick deployment of all tables to your own machine.
 
-    * Or you can run all the R or Python Scripts following the path for Debra the data scientist in the [Typical Workflow](Typical_Workflow.html).  
