@@ -6,7 +6,7 @@ title: Description of Database Tables
 ## SQL Database Tables and Stored Procedures
 -----------------------
 
-Below are the data tables that you will find in your database after deployment.
+Below are the data tables that you will find in either the TextClassification_Py and TextClassification_R databases after deployment.
 
 <table class="table" >
 	<thead>
@@ -17,45 +17,33 @@ Below are the data tables that you will find in your database after deployment.
 	</thead>
 	<tbody>
 		<tr>
-			<td>dbo.ImageStore</td>
-            <td>FileTable, used to save the images</td>
+			<td>dbo.Label_Names</td>
+            <td>Names associated with each of the 20 labels</td>
         </tr>
         <tr>
-			<td>dbo.features</td>
-            <td>SQL table which used to save images' path, label and DNN features</td>
+			<td>dbo.Metrics</td>
+            <td>Metrics for the trained model</td>
         </tr>
         <tr>
-			<td>dbo.training_images</td>
-            <td>training images</td>
+			<td>dbo.Model</td>
+            <td>Trained model</td>
         </tr>
         <tr>
-			<td>dbo.testing_images</td>
-            <td>testing images</td>
+			<td>dbo.News_Test</td>
+            <td>News items in the test set</td>
         </tr>
         <tr>
-			<td>dbo.evaluation_images</td>
-            <td>image pairs used to evaluate the model</td>
+			<td>dbo.News_To_Score</td>
+            <td>News items to score</td>
         </tr>
         <tr>
-			<td>dbo.scores</td>
-            <td>predicted scores of all the images</td>
-        </tr>
-        <tr>
-			<td>dbo.model</td>
-            <td>trained model</td>
-        </tr>
-        <tr>
-			<td>dbo.query_images</td>
-            <td>query images</td>
-        </tr>
-        <tr>
-			<td>dbo.ranking_results</td>
-            <td>ranked candidates for all the query images</td>
+			<td>dbo.News_Train</td>
+            <td>News items for training the model</td>
         </tr>
     </tbody>
 </table>
 
-The following stored procedures are used in this solutions:
+The following stored procedures are used in this solutions in either the TextClassification_Py or TextClassification_R databases:
 <table class="table" >
 	<thead>
 		<tr>
@@ -65,22 +53,17 @@ The following stored procedures are used in this solutions:
 	</thead>
 	<tbody>
 	    <tr>
-        <td>EvaluateModel</td><td>Evaluates the performance of the model in terms of ranking</td>
+        <td>dbo.evaluate</td><td>Evaluates the performance of the model</td>
         </tr>
         <tr>
-        <td>FeaturizeImages</td><td>Generates features from the images using a pre-trained Resnet in `microsoftml` </td>
+        <td>dbo.initial_Run_Once_Py  dbo.initial_Run_Once_R</td><td>Runs the training workflow natively in SQL for this solution</td>
         </tr>
         <tr>
-        <td>Initial_Run_Once_Py</td><td>Runs the training workflow natively in SQL for this solution</td>
+        <td>dbo.score</td><td>Creates features on the fly for the testing set and makes predictions </td>
         </tr>
         <tr>
-        <td>PrepareData</td><td>Creates and prepares the training/testing/evaluation image set </td>
+        <td>dbo.train_model</td><td>Creates features on the fly for the training set and train the multiclass logistic regression model</td>
         </tr>
-        <tr>
-        <td>RankCandidates</td><td>Finds similar images for each query image</td>
-        </tr>
-        <tr>
-        <td>TrainClassifier</td><td>Trains a neural network model using `microsoftml` library and saves the model into SQL table </td>
-        </tr>
+        <trr>
         </tbody>
         </table>

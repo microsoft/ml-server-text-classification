@@ -6,7 +6,7 @@ description: Text Classificaion using SQL Server 2017 + ML Services with R or Py
 solution_name: TextClassification
 folder_name: TextClassification
 db_name: TextClassification
-ps1_name: SetupVM.ps1
+ps1_name: TextClassificationSetup.ps1
 pbix_name: TextClassification.pbix
 
 

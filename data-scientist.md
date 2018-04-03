@@ -16,6 +16,7 @@ title: For the images Scientist
             <li><a href="#step1">Step 1: Loading the data to SQL Server     </a></li>
             <li><a href="#step2">Step 2: Create features on the fly for the training set and train the model</a></li>
             <li><a href="#step3">Step 3: Create features on the fly for the testing set, make predictions, and evaluate the model</a></li>
+            <li><a href="#step4">Step 4: Visualize the results</a></li>
             <li><a href="#template-contents">Template Contents</a></li>
         </div>
     </div>
@@ -125,7 +126,19 @@ Finally, we compute performance metrics in order to evaluate the model for this 
 
 These two metrics should thus be analyzed together, especially in the case of class imbalances.
 
+<a name="step4"></a>
 
+### Step 4: Visualize the Results 
+-------------------------
+The Power BI file **TextClassification.pbix** included with this solution can be used to visualize how the model performs.  
+
+On the `Training Summary` tab, you can see the predicted and actual labels for the Test data, along with the Micro Average Accuracy and Macro Average Accuracy values.  
+
+<img src="images/pbi1.png" />
+
+On the `Scoring New Text` tab you can view the predicted labels for new text.  
+
+<img src="images/pbi1.png" />
 
 ## Template Contents 
 ---------------------
