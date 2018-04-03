@@ -262,14 +262,13 @@ IF ($RequireCuUpdate -eq 0)
 
 ##CU4 
     Start-BitsTransfer -Source "http://download.windowsupdate.com/c/msdownload/update/software/updt/2018/03/sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe" -Destination c:\tmp\sqlserver2017CU4.exe   
-
+    $CU = "sqlserver2017CU4.exe"
     Write-Host 
     ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
-##CU3   
-    Invoke-Expression "c:\tmp\sqlserver2017CU4.exe  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
+  
+    Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
  
-##CU4 
- ##   Invoke-Expression "c:\tmp\sqlserver2017-kb4056498-x64_d1f84e3cfbda5006301c8e569a66a982777a8a75.exe /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"
+
    Write-Host 
     ("CU Install has commenced")
     Write-Host 
