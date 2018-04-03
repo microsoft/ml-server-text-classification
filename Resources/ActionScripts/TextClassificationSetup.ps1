@@ -240,7 +240,7 @@ Write-Host
 
 $Query = "SELECT CASE 
 WHEN  
-    (RIGHT(CAST(SERVERPROPERTY('ProductUpdateLevel') as varchar),1) > 1)
+    (RIGHT(CAST(SERVERPROPERTY('ProductUpdateLevel') as varchar),1) >= 1)
     AND 
     (SELECT Left(CAST(SERVERPROPERTY('productversion') as varchar),2))>= 14
 THEN 1 
