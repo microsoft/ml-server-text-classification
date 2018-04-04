@@ -6,7 +6,7 @@ title: Description of Database Tables
 ## SQL Database Tables and Stored Procedures
 -----------------------
 
-Below are the data tables that you will find in either the TextClassification_Py and TextClassification_R databases after deployment.
+Below are the data tables that you will find in either the `{{ site.db_name }}_R` or `{{ site.db_name }}_Py` databases after deployment.
 
 <table class="table" >
 	<thead>
@@ -43,7 +43,7 @@ Below are the data tables that you will find in either the TextClassification_Py
     </tbody>
 </table>
 
-The following stored procedures are used in this solutions in either the TextClassification_Py or TextClassification_R databases:
+The following stored procedures are used in this solutions in either the `{{ site.db_name }}_R` or `{{ site.db_name }}_Py` databases:
 <table class="table" >
 	<thead>
 		<tr>
@@ -56,7 +56,7 @@ The following stored procedures are used in this solutions in either the TextCla
         <td>dbo.evaluate</td><td>Evaluates the performance of the model</td>
         </tr>
         <tr>
-        <td>dbo.initial_Run_Once_Py  dbo.initial_Run_Once_R</td><td>Runs the training workflow natively in SQL for this solution</td>
+        <td>dbo.initial_Run_Once_R <br/> dbo.initial_Run_Once_Py</td><td>Runs the training workflow natively in SQL for this solution</td>
         </tr>
         <tr>
         <td>dbo.score</td><td>Creates features on the fly for the testing set and makes predictions </td>
@@ -64,6 +64,5 @@ The following stored procedures are used in this solutions in either the TextCla
         <tr>
         <td>dbo.train_model</td><td>Creates features on the fly for the training set and train the multiclass logistic regression model</td>
         </tr>
-        <trr>
         </tbody>
         </table>

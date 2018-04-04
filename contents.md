@@ -11,6 +11,8 @@ The following is the directory structure for this template:
 - [**Data**](#data)  This contains Data for scoring.  Other data is downloaded during the solution workflow
 - [**R**](#model-development-in-R)  This contains the R code to prepare training/testing/evaluation set, train the multi-class classifier and evaluate the model.
 - [**Python**](#model-development-in-python)  This contains the Python code to prepare training/testing/evaluation set, train the multi-class classifier and evaluate the model.
+- [**SQLR**](#operationalize-in-sql-r ) Stored procedures in SQL implement the model training workflow with R code.
+- [**SQLPy**](#operationalize-in-sql-python ) Stored procedures in SQL implement the model training workflow with Python code.
 - [**Resources**](#resources-for-the-solution-packet) This directory contains other resources for the solution package.
 
 
@@ -18,20 +20,19 @@ The following is the directory structure for this template:
 
 ### Data
 ----------------------------
-
+Data for training and testing will also be downloaded and added to this directory, so more files will be present once the solution has been run once.  
 <table class="table table-striped table-condensed">
 <tr><th> File </th><th> Description</th></tr>
-<tr><th> File </th><th> Description </th></tr>
 <tr><td>News_To_Score  </td><td> Text file containing new data for scoring. </td></tr>
 </table>
 
-### Model Development in Python
+### Model Development in R
 -------------------------
 
 <table class="table table-striped table-condensed">
-<tr><th> File </th><th> Description </th></tr>
-<tr><td>TextClassificationR.ipynb  </td><td> Create features on the fly for the training and testing set, train model, make predictions, and evaluate the model in Jupyter notebook.</td></tr>
-<tr><td>run_modeling_main.R  </td><td> Create features on the fly for the training and testing set, train model, make predictions, and evaluate the model.</td></tr>
+    <tr><th> File </th><th> Description </th></tr>
+    <tr><td>TextClassificationR.ipynb  </td><td> Create features on the fly for the training and testing set, train model, make predictions, and evaluate the model in Jupyter notebook.</td></tr>
+    <tr><td>run_modeling_main.R  </td><td> Create features on the fly for the training and testing set, train model, make predictions, and evaluate the model.</td></tr>
 </table>
 
 * See [For the Data Scientist](data_scientist.html) for more details about these files.
@@ -42,7 +43,7 @@ The following is the directory structure for this template:
 Stored procedures in SQL implement the model training workflow with R code.
 
 <table class="table table-striped table-condensed">
-<tr><th> File </th><th> Description </th></tr> </td></tr>
+<tr><th> File </th><th> Description </th></tr> 
 <tr><td>Load_Data.ps1</td><td>Loads all data for the solution if you'd like to create a second instance of the solution on the same server</td></tr>
 <tr><td>execute_yourself.sql</td><td>Runs through all the steps of the solution</td></tr>
 <tr><td>step0_create_tables.sql</td><td>Create data tables, invoked in Load_Data.ps1</td></tr>
@@ -72,7 +73,7 @@ Stored procedures in SQL implement the model training workflow with R code.
 Stored procedures in SQL implement the model training workflow with Python code.
 
 <table class="table table-striped table-condensed">
-<tr><th> File </th><th> Description </th></tr> </td></tr>
+<tr><th> File </th><th> Description </th></tr> 
 <tr><td>Load_Data.ps1</td><td>Loads all data for the solution if you'd like to create a second instance of the solution on the same server</td></tr>
 <tr><td>execute_yourself.sql</td><td>Runs through all the steps of the solution</td></tr>
 <tr><td>step0_create_tables.sql</td><td>Create data tables, invoked in Load_Data.ps1</td></tr>

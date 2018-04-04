@@ -11,10 +11,15 @@ title: For the Database Analyst
         <div class="toc">
             <li><a href="#system-requirements">System Requirements</a></li>
             <li><a href="#workflow-automation">Workflow Automation</a></li>
-            <li><a href="#step0">Step 0: Creating Tables</a></li>
-            <li><a href="#step1">Step 1: Create features on the fly for the training set and train the model</a></li>
-            <li><a href="#step2">Step 2: Create features on the fly for the testing set and make predictions</a></li>
-            <li><a href="#step3">Step 3: Evaluate the model</a></li>
+            <ul>
+                <li><a href="#step0">Step 0: Creating Tables</a></li>
+                <li><a href="#step1">Step 1: Create features on the fly for the training set and train the model</a></li>
+                <li><a href="#step2">Step 2: Create features on the fly for the testing set and make predictions</a></li>
+                <li><a href="#step3">Step 3: Evaluate the model</a></li>
+            </ul>
+            <li><a href="#step4">Visualize the results</a></li>
+            <li><a href="#template-contents">Template Contents</a></li>
+
         </div>
     </div>
     <div class="col-md-6">
@@ -122,4 +127,4 @@ After evaluating the model, predictions are made on a new data set, News_To_Scor
 
 These new records can be seen in the second tab of the PowerBI report. 
 
-
+{% include finalsteps.md %}
