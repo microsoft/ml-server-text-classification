@@ -220,26 +220,6 @@ ELSE
     Restart-Service -Name "MSSQ*" -Force
 }
 
-####Instal Python 
-
-
-# if($InstallPy -eq 'Yes')
-# {
-# #### Section for ImageSimilarity - install python package and copy resnet files
-# $src= "C:\Program Files\Microsoft\ML Server\PYTHON_SERVER\Lib\site-packages\microsoftml\mxLibs\resnet*"
-# $dest= "C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\PYTHON_SERVICES\Lib\site-packages\microsoftml\mxLibs"
-# copy-item $src $dest
-# Write-Host "Done with copying ResNet models"
-
-# # install package for both SQL and ML python
-# Set-Location $SolutionPath\Resources\ActionScripts
-# $installPyPkg = ".\installPyPkg.bat c:\Solutions\ImageSimilarity"
-# Invoke-Expression $installPyPkg 
-# Write-Host "Done installing image_similarity package"
-
-# ##### End of section for ImageSimilarity
-
-# }
 
 ###Install SQL CU 
 
@@ -289,6 +269,7 @@ IF ($RequireCuUpdate -eq 0)
     Set-Location $scriptPath
     invoke-expression ".\UpdateMLServer.bat"
     Write-Host "ML Server has been updated"
+    }
 ELSE 
     {
     Write-Host 
