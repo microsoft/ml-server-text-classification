@@ -247,6 +247,8 @@ END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
 
+$RequireCuUpdate = "1"
+
 IF ($RequireCuUpdate -eq 0) 
     {
     WRITE-Host 
