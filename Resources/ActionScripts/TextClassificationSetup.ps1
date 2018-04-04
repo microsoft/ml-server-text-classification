@@ -193,8 +193,7 @@ if ($EnableFileStream -eq 'Yes')
     $instance = "MSSQLSERVER"
     $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where-object {$_.InstanceName -eq $instance}
     $wmi.EnableFilestream(3, $instance) 
-    Stop-Service "MSSQ*" -Force
-    Start-Service "MSSQ*"
+    Restart-Service -Name "MSSQ*" -Force
 
 #Import-Module "sqlps" -DisableNameChecking
     Invoke-Sqlcmd "EXEC sp_configure filestream_access_level, 2"
@@ -232,7 +231,6 @@ ELSE
 
 # }
 
-
 ###Install SQL CU 
 
 Write-Host 
@@ -248,7 +246,7 @@ ELSE 0
 END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
-##$RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
+
 IF ($RequireCuUpdate -eq 0) 
     {
     WRITE-Host 
@@ -268,7 +266,6 @@ IF ($RequireCuUpdate -eq 0)
   
     Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
  
-
    Write-Host 
     ("CU Install has commenced")
     Write-Host 
@@ -306,24 +303,17 @@ If ($UsePowerBI -eq 'Yes')
     }
 }
 
-
-
 ##Create Shortcuts and Autostart Help File 
-Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
-Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
-Write-Host 
-("Help Files Copied to Desktop")
-
+    Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
+    Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
+    Write-Host 
+    ("Help Files Copied to Desktop")
 
 $WsShell = New-Object -ComObject WScript.Shell
 $shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
 
-
-
-
-# install modules for sample website
 # install modules for sample website
 if($SampleWeb  -eq "Yes")
 {
