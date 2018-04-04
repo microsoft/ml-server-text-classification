@@ -288,6 +288,7 @@ IF ($RequireCuUpdate -eq 0)
     ###Unbind Python 
     Set-Location $scriptPath
     invoke-expression ".\UpdateMLServer.bat"
+    Write-Host "ML Server has been updated"
 ELSE 
     {
     Write-Host 
