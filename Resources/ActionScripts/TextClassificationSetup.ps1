@@ -286,10 +286,8 @@ IF ($RequireCuUpdate -eq 0)
     Write-Host 
     ("Powershell nap time is over")
     ###Unbind Python 
-    invoke-expression "C:\Program Files\Microsoft\ML Server\Setup>.\SqlBindR.exe /unbind MSSQL14.MSSQLSERVER"
-    ##Bind Python
-    invoke-expression "C:\Program Files\Microsoft\ML Server\Setup>.\SqlBindR.exe /bind MSSQL14.MSSQLSERVER /python"
-    }
+    Set-Location $scriptPath
+    invoke-expression ".\UpdateMLServer.bat"
 ELSE 
     {
     Write-Host 
