@@ -41,7 +41,7 @@ if ($isAdmin -eq 'True')
 #     }
 #     ELSE 
 # {
-    Write-Host ("Advanced Analytics is present, set up can continue")
+ #   Write-Host ("Advanced Analytics is present, set up can continue")
 
 $startTime = Get-Date
 
@@ -53,6 +53,9 @@ Write-Host
 
 #$Prompt= if ($Prompt -match '^y(es)?$') {'Y'} else {'N'}
 $Prompt = 'N'
+
+
+
 
 
 ##Change Values here for Different Solutions 
@@ -115,6 +118,13 @@ If ($InstalR -eq 'Yes')
 # install R Packages
     Rscript install.R 
     }
+
+
+##Check DSVM Version 
+Set-Location $scriptPath
+invoke-expression .\CheckDSVMVersion.bat
+
+
 
 
 #################################################################
@@ -247,7 +257,7 @@ END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
 
-$RequireCuUpdate = "1"
+##$RequireCuUpdate = "1"
 
 IF ($RequireCuUpdate -eq 0) 
     {
@@ -266,7 +276,7 @@ IF ($RequireCuUpdate -eq 0)
     Write-Host 
     ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
   
-    Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
+    Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER /FEATURES=SQLEngine,ADVANCEDANALYTICS,SQL_INST_MR,SQL_INST_MPY"    
  
    Write-Host 
     ("CU Install has commenced")
@@ -275,6 +285,10 @@ IF ($RequireCuUpdate -eq 0)
     Start-Sleep -s 1000
     Write-Host 
     ("Powershell nap time is over")
+    ###Unbind Python 
+    invoke-expression "C:\Program Files\Microsoft\ML Server\Setup>.\SqlBindR.exe /unbind MSSQL14.MSSQLSERVER"
+    ##Bind Python
+    invoke-expression "C:\Program Files\Microsoft\ML Server\Setup>.\SqlBindR.exe /bind MSSQL14.MSSQLSERVER /python"
     }
 ELSE 
     {
