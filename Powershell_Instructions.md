@@ -39,6 +39,8 @@ Running this PowerShell script will create the data tables and stored procedures
 
 1. Log onto the machine that contains the SQL Server you wish to use.
 
+1. Install [Git](https://gitforwindows.org/) if it is not already present. During the install, check the box to add LFS support.
+
 2. Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-text-classification/dev/Resources/ActionScripts/TextClassificationSetup.ps1" download>TextClassificationSetup.ps1</a> to your computer.
 
 3. Open a command or PowerShell window as Administrator.
@@ -47,20 +49,15 @@ Running this PowerShell script will create the data tables and stored procedures
 
     .\TextClassificationSetup.ps1
 
-5. Answer the prompts.
+5. Answer the prompts if any.
 
 This will make the following modification to your SQL Server:
 
 * Creates the SLQRUserGroup for running R and Python code.
 * Reconfigures SQL Server to allow running of external scripts.
 * Installs the latest SQL Server 2017 Cumulative Update if no updates have been installed (this solution requires at least CU1 to run successfully).
-* Enables firewall access for FILESTREAM
-* Enables FILESTREAM at the SQL instance level as described [here](https://docs.microsoft.com/en-us/sql/relational-imagesbases/blob/enable-the-prerequisites-for-filetable).
-* Copies the Resnet model needed for this solution into the correct directory.
 * Clones the solution code and data into the c:\Solutions\{{ site.folder_name }} directory.
-* Installs the image_similarity Python package.
-* Creates the solution database `{{ site.db_name }}` 
-* Copies images to the configured filestream directory.
+* Creates the solution databases `{{ site.db_name }}_R` and `{{ site.db_name }}_Py`
 * Runs the solution workflow to populate all database tables.
 
 <div class="alert alert info">    
