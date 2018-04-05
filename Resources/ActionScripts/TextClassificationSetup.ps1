@@ -41,7 +41,7 @@ if ($isAdmin -eq 'True')
 #     }
 #     ELSE 
 # {
-    Write-Host ("Advanced Analytics is present, set up can continue")
+ #   Write-Host ("Advanced Analytics is present, set up can continue")
 
 $startTime = Get-Date
 
@@ -53,6 +53,9 @@ Write-Host
 
 #$Prompt= if ($Prompt -match '^y(es)?$') {'Y'} else {'N'}
 $Prompt = 'N'
+
+
+
 
 
 ##Change Values here for Different Solutions 
@@ -115,6 +118,13 @@ If ($InstalR -eq 'Yes')
 # install R Packages
     Rscript install.R 
     }
+
+
+##Check DSVM Version 
+Set-Location $scriptPath
+invoke-expression .\CheckDSVMVersion.bat
+
+
 
 
 #################################################################
@@ -193,8 +203,7 @@ if ($EnableFileStream -eq 'Yes')
     $instance = "MSSQLSERVER"
     $wmi = Get-WmiObject -Namespace "ROOT\Microsoft\SqlServer\ComputerManagement14" -Class FilestreamSettings | where-object {$_.InstanceName -eq $instance}
     $wmi.EnableFilestream(3, $instance) 
-    Stop-Service "MSSQ*" -Force
-    Start-Service "MSSQ*"
+    Restart-Service -Name "MSSQ*" -Force
 
 #Import-Module "sqlps" -DisableNameChecking
     Invoke-Sqlcmd "EXEC sp_configure filestream_access_level, 2"
@@ -210,27 +219,6 @@ ELSE
     ### Stop the SQL Service and Launchpad wild cards are used to account for named instances  
     Restart-Service -Name "MSSQ*" -Force
 }
-
-####Instal Python 
-
-
-# if($InstallPy -eq 'Yes')
-# {
-# #### Section for ImageSimilarity - install python package and copy resnet files
-# $src= "C:\Program Files\Microsoft\ML Server\PYTHON_SERVER\Lib\site-packages\microsoftml\mxLibs\resnet*"
-# $dest= "C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\PYTHON_SERVICES\Lib\site-packages\microsoftml\mxLibs"
-# copy-item $src $dest
-# Write-Host "Done with copying ResNet models"
-
-# # install package for both SQL and ML python
-# Set-Location $SolutionPath\Resources\ActionScripts
-# $installPyPkg = ".\installPyPkg.bat c:\Solutions\ImageSimilarity"
-# Invoke-Expression $installPyPkg 
-# Write-Host "Done installing image_similarity package"
-
-# ##### End of section for ImageSimilarity
-
-# }
 
 
 ###Install SQL CU 
@@ -248,7 +236,9 @@ ELSE 0
 END "
 $RequireCuUpdate = Invoke-Sqlcmd -Query $Query
 $RequireCuUpdate = $RequireCuUpdate.Item(0)
-##$RequireCuUpdate = 1 ####Just testing to here to see if Scripts will run without updates 
+
+##$RequireCuUpdate = "1"
+
 IF ($RequireCuUpdate -eq 0) 
     {
     WRITE-Host 
@@ -266,9 +256,8 @@ IF ($RequireCuUpdate -eq 0)
     Write-Host 
     ("CU has been Downloaded now to install , go have a cocktail as this takes a while")
   
-    Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER"    
+    Invoke-Expression "c:\tmp\$CU  /q /IAcceptSQLServerLicenseTerms /IACCEPTPYTHONLICENSETERMS /IACCEPTROPENLICENSETERMS /Action=Patch /InstanceName=MSSQLSERVER /FEATURES=SQLEngine,ADVANCEDANALYTICS,SQL_INST_MR,SQL_INST_MPY"    
  
-
    Write-Host 
     ("CU Install has commenced")
     Write-Host 
@@ -276,6 +265,10 @@ IF ($RequireCuUpdate -eq 0)
     Start-Sleep -s 1000
     Write-Host 
     ("Powershell nap time is over")
+    ###Unbind Python 
+    Set-Location $scriptPath
+    invoke-expression ".\UpdateMLServer.bat"
+    Write-Host "ML Server has been updated"
     }
 ELSE 
     {
@@ -306,24 +299,17 @@ If ($UsePowerBI -eq 'Yes')
     }
 }
 
-
-
 ##Create Shortcuts and Autostart Help File 
-Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
-Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
-Write-Host 
-("Help Files Copied to Desktop")
-
+    Copy-Item "$ScriptPath\$Shortcut" C:\Users\Public\Desktop\
+    Copy-Item "$ScriptPath\$Shortcut" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\"
+    Write-Host 
+    ("Help Files Copied to Desktop")
 
 $WsShell = New-Object -ComObject WScript.Shell
 $shortcut = $WsShell.CreateShortcut($desktop + $checkoutDir + ".lnk")
 $shortcut.TargetPath = $solutionPath
 $shortcut.Save()
 
-
-
-
-# install modules for sample website
 # install modules for sample website
 if($SampleWeb  -eq "Yes")
 {
