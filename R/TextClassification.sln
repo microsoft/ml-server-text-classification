@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "TextClassification", "TextClassification.rxproj", "{95EFE2CE-847B-49A1-B3E6-597DBA7C8A90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95EFE2CE-847B-49A1-B3E6-597DBA7C8A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95EFE2CE-847B-49A1-B3E6-597DBA7C8A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95EFE2CE-847B-49A1-B3E6-597DBA7C8A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95EFE2CE-847B-49A1-B3E6-597DBA7C8A90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54B2BB02-B7B3-48D1-A377-E0258A5D1FE8}
+	EndGlobalSection
+EndGlobal
