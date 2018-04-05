@@ -336,6 +336,8 @@ Set-Location $SolutionPath\Website\
 ##Launch HelpURL 
 Start-Process "https://microsoft.github.io/$SolutionFullName/"
 
+
+
 $endTime = Get-Date
 
 Write-Host 
