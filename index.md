@@ -3,6 +3,7 @@ layout: default
 title: HOME
 ---
 
+
 When a customer sends a support ticket, it is important to route it to the right team to examine the issue and solve it in the fastest way possible. This solution trains a model to classify text data.  It uses a preprocessed version of [NewsGroups20](http://scikit-learn.org/stable/datasets/twenty_newsgroups.html), containing a Subject (extracted from the raw text data), a Text, and a Label (20 classes). While this is not support ticket data, it has a similar structure to a support ticket data set which would also have two data fields: Title and Problem description.
 
 The preprocessed training and testing sets are first uploaded to SQL Server. Text featurization is then defined. It consists of removing punctuation, diacritics, numbers, and predefined stopwords, then hashing the 2-gram words and 3-gram characters. The Subject and Text are featurized separately in order to give the words in the Subject as much weight as those in the Text, which is larger. Treating those two variables separately has proven to increase slightly the models predictive power in our experiments.
