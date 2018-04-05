@@ -134,8 +134,7 @@ if(rxSqlServerTableExists(OdbcModel@table, OdbcModel@connectionString)) {
 rxExecuteSQLDDL(OdbcModel, 
                 sSQLString = paste("CREATE TABLE [", OdbcModel@table, "] (",
                                    "[id] varchar(200) not null, ",
-                                   "[value] varbinary(max), ",
-                                   "constraint unique_id2 unique (id))",
+                                   "[value] varbinary(max) )",
                                    sep = "")
 )
 
