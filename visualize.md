@@ -11,10 +11,10 @@ The report contains a [wordcloud custom visual](https://appsource.microsoft.com/
 
 On the `Training Summary` tab, you can see the predicted and actual labels for the Test data, along with the Micro Average Accuracy and Macro Average Accuracy values.  
 
-<img src="images/pbi1.png" />
+<img src="images/pbi1.PNG" />
 
 On the `Scoring New Text` tab you can view the predicted labels for new text.  
 
-<img src="images/pbi2.png" />
+<img src="images/pbi2.PNG" />
 
 The intial version of this file contains cached data. You can refresh the

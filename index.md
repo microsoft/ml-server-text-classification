@@ -16,4 +16,4 @@ This solution starts with data stored in SQL Server.  The data scientist works f
 
 New data is scored using the `score` stored procedure in SQL.  You can view the predicted labels in the output table `Predicted_New`, or visualize both test and new data and predicted labels in the {{site.pbix_name}} file.
 
-<img src="images/pbi2.png" />
+<img src="images/pbi2.PNG" />
