@@ -1,4 +1,9 @@
+<img src="Resources/images/fraud.jpg" align="right" width="50%">
 
+# Text Classification 
+## Implemented on SQL Server 2017 Machine Learning Services with R and Python
+
+For all documentation, visit the [Text Classification website](https://microsoft.github.io/ml-server-text-classification/).
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
