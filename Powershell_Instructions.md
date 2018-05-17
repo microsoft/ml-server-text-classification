@@ -41,7 +41,7 @@ Running this PowerShell script will create the data tables and stored procedures
 
 1. Install [Git](https://gitforwindows.org/) if it is not already present. During the install, check the box to add LFS support.
 
-2. Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-text-classification/dev/Resources/ActionScripts/TextClassificationSetup.ps1" download>TextClassificationSetup.ps1</a> to your computer.
+2. Download  <a href="https://raw.githubusercontent.com/Microsoft/ml-server-text-classification/master/Resources/ActionScripts/TextClassificationSetup.ps1" download>TextClassificationSetup.ps1</a> to your computer.
 
 3. Open a command or PowerShell window as Administrator.
 
