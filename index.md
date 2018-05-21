@@ -2,7 +2,10 @@
 layout: default
 title: HOME
 ---
-
+<div class="alert alert-warning cig">
+Are you unable to connect to your Virtual Machine? See this important information for
+<a href="https://blogs.technet.microsoft.com/mckittrick/unable-to-rdp-to-virtual-machine-credssp-encryption-oracle-remediation/">how to resolve.</a>
+</div>
 
 When a customer sends a support ticket, it is important to route it to the right team to examine the issue and solve it in the fastest way possible. This solution trains a model to classify text data.  It uses a preprocessed version of [NewsGroups20](http://scikit-learn.org/stable/datasets/twenty_newsgroups.html), containing a Subject (extracted from the raw text data), a Text, and a Label (20 classes). While this is not support ticket data, it has a similar structure to a support ticket data set which would also have two data fields: Title and Problem description.
 
