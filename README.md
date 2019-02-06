@@ -1,15 +1,17 @@
 <img src="Resources/images/TextAnalysis.png" align="right" width="50%">
 
 # Text Classification 
-## Implemented on SQL Server 2017 Machine Learning Services with R and Python
+
+### Deploy to Azure on SQL Server
+[![Deploy to Azure (SQL Server)](https://raw.githubusercontent.com/Azure/Azure-CortanaIntelligence-SolutionAuthoringWorkspace/master/docs/images/DeployToAzure.PNG)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2Fml-server-text-classification%2Fmaster%2FArmTemplates%2Ftextclassification_arm.json)
+
+## More samples and information
 
 > Discover more examples at [Microsoft Machine Learning Server](https://github.com/Microsoft/ML-Server)
 
-Deploy this solution from [Azure AI Gallery](https://aka.ms/text-classification).
-
 For all documentation, visit the [Text Classification website](https://microsoft.github.io/ml-server-text-classification/).
 
-# Contributing
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
