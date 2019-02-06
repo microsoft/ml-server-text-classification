@@ -11,7 +11,7 @@
 ### Introduction
 -------------------------
 
-When a customer sends a support tiket, it is important to route it to the right team in order to examine the issue and solve it in the fastest way possible. This notebook uses a preprocessed version of the NewsGroups20, containing a Subject, a Text, and a Label (20 classes). It has a similar structure to a support tiket data set which would also haver two data fields: Title, and Problem description.
+When a customer sends a support ticket, it is important to route it to the right team in order to examine the issue and solve it in the fastest way possible. This notebook uses a preprocessed version of the NewsGroups20, containing a Subject, a Text, and a Label (20 classes). It has a similar structure to a support ticket data set which would also haver two data fields: Title, and Problem description.
 
 For businesses that prefers an on-prem solution, the implementation with SQL Server R Services is a great option, which takes advantage of the power of SQL Server and RevoScaleR (Microsoft R Server). In this template, we implemented all steps in SQL stored procedures: data preprocessing, and feature engineering are implemented in pure SQL, while models training, scoring and evaluation steps are implemented with SQL stored procedures with embedded R (Microsoft R Server) code. 
 
@@ -22,9 +22,9 @@ All the steps can be executed on SQL Server client environment (such as SQL Serv
 
 To run the scripts, it requires the following:
  * SQL server 2017 with RevoscaleR (version 9.2) and MicrosoftML (version 1.4.0) installed and configured;
- * The SQL user name and password, and the user is configured properly to execute R scripts in-memory;
- * SQL Database for which the user has write permission and can execute stored procedures (see create_user.sql);
- * Implied authentification is enabled so a connection string can be automatically created in R codes embedded into SQL Stored Procedures (see create_user.sql).
+ * The SQL user name and password, and the user is configured properly to execute R scripts in-memory (see [create_user.sql](..\Resources\ActionScripts\create_user.sql)).
+ * SQL Database for which the user has write permission and can execute stored procedures (see [create_user.sql](..\Resources\ActionScripts\create_user.sql)).
+ * Implied authentication is enabled so a connection string can be automatically created in R codes embedded into SQL Stored Procedures.
  * For more information about SQL server 2016 and R service, please visit: https://msdn.microsoft.com/en-us/library/mt604847.aspx
 
 
