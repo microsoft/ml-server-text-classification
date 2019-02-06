@@ -23,7 +23,7 @@ To run the scripts, it requires the following:
  * SQL server 2017 with RevoscalePy (version 9.2) and MicrosoftML (version 1.5.0) installed and configured;
  * The SQL user name and password;
  * SQL Database for which the user has write permission;
- * For more information about SQL server 2017 and Python service, please visit: https://msdn.microsoft.com/en-us/library/mt604847.aspx
+ * For more information about SQL server 2017 and Python service, please visit: https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services
 
 The file "modeling_main.py" enables the user to define the input and perform all the steps. Inputs are: paths to the raw data files, database name, server name, username and password.
 The database is created if not already existing, and the connection string as well as the SQL compute context are defined. 

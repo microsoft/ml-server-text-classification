@@ -25,7 +25,7 @@ To run the scripts, it requires the following:
  * The SQL user name and password, and the user is configured properly to execute Python scripts in-memory (see [create_user.sql](..\Resources\ActionScripts\create_user.sql)).
  * SQL Database for which the user has write permission and can execute stored procedures (see [create_user.sql](..\Resources\ActionScripts\create_user.sql)).
  * Implied authentication is enabled so a connection string can be automatically created in R codes embedded into SQL Stored Procedures.
- * For more information about SQL server 2016 and R service, please visit: https://msdn.microsoft.com/en-us/library/mt604847.aspx
+ * For more information about SQL server 2016 and R service, please visit: https://docs.microsoft.com/en-us/sql/advanced-analytics/what-s-new-in-sql-server-machine-learning-services
 
 
 ### Workflow Automation
