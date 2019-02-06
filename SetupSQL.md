@@ -25,7 +25,7 @@ title: "On-Prem: Setup SQL Server 2017"
 
 The rest of this page assumes you are configuring your on premises SQL Server 2016 or 2017 for this solution.
 
-If you need a trial version of SQL Server see [What's New in SQL Server 2017](https://docs.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2017)for download or VM options. 
+If you need a trial version of SQL Server see [What's New in SQL Server 2017](https://docs.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2017) for download or VM options. 
 
 Complete the steps in the Set up Microsoft Machine Learning Services (In-Database) Instructions. The set up instructions file can found at  <a href="https://docs.microsoft.com/en-us/sql/advanced-analytics/install/sql-r-services-windows-install" target="_blank">https://docs.microsoft.com/en-us/sql/advanced-analytics/install/sql-r-services-windows-install</a>
 
