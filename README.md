@@ -1,7 +1,7 @@
 <img src="Resources/images/TextAnalysis.png" align="right" width="50%">
 
 # Text Classification 
-
+Classify text (such as news messages) into groups by subject.
 ### Deploy to Azure on SQL Server
 [![Deploy to Azure (SQL Server)](https://raw.githubusercontent.com/Azure/Azure-CortanaIntelligence-SolutionAuthoringWorkspace/master/docs/images/DeployToAzure.PNG)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2Fml-server-text-classification%2Fmaster%2FArmTemplates%2Ftextclassification_arm.json)
 
